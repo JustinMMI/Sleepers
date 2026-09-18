@@ -1,0 +1,220 @@
+{
+    "1": {
+        "bed_type": "LIT BLEU",
+        "nap_duration": "45 min",
+        "dreamer": true,
+        "sleep_habits": [
+            "☕ Tisane camomille",
+            "🧸 Doudou réconfortant",
+            "🎧 Casque anti-bruit",
+            "🕯️ Bougie parfumée",
+            "⏱️ 45 min"
+        ],
+        "sleep_sound": "🌧️ Bruit de pluie",
+        "pillow_count": "3 oreillers",
+        "wake_up_style": "☕ Café chaud au lit",
+        "ideal_partner": "Quelqu'un de calme qui aime s'endormir avec le bruit de la pluie."
+    },
+    "2": {
+        "bed_type": "LIT EN FORME D'EQUERRE",
+        "nap_duration": "30 min",
+        "dreamer": false,
+        "sleep_habits": [
+            "📐 Lit à angle droit",
+            "⏱️ 30 min (chrono)",
+            "🔇 Silence complet",
+            "😴 Sommeil profond sans rêve"
+        ],
+        "sleep_sound": "🔇 Silence absolu",
+        "pillow_count": "1 oreiller ergonomique",
+        "wake_up_style": "Murmures discrets et étirements",
+        "ideal_partner": "Posture stable exigée, aucun mouvement brusque."
+    },
+    "3": {
+        "bed_type": "LIT SIMPLE A CARREAU UN PEU GRAND MAIS PAS TROP",
+        "nap_duration": "20 min",
+        "dreamer": true,
+        "sleep_habits": [
+            "🛌 Plaid à carreaux",
+            "⏱️ 20 min (micro-sieste)",
+            "🎧 Lo-fi doux",
+            "💤 Voyageur de rêves"
+        ],
+        "sleep_sound": "🎧 Musique lo-fi relaxante",
+        "pillow_count": "2 oreillers classiques",
+        "wake_up_style": "Lumière tamisée progressive",
+        "ideal_partner": "Sieste synchronisée en musique douce."
+    },
+    "4": {
+        "bed_type": "Gigantesque lit qui peut accueillir 3 personnes",
+        "nap_duration": "1h30",
+        "dreamer": true,
+        "sleep_habits": [
+            "🧸 Doudou XXL",
+            "⏱️ 1h30 (cycle complet)",
+            "💤 Rêves multicolores",
+            "☁️ Matelas nuage"
+        ],
+        "sleep_sound": "Berceuse murmurée",
+        "pillow_count": "5 coussins géants",
+        "wake_up_style": "Câlin en douceur",
+        "ideal_partner": "Quelqu'un qui a besoin de beaucoup d'espace pour dormir."
+    },
+    "5": {
+        "bed_type": "Lit classique ultra confortable",
+        "nap_duration": "40 min",
+        "dreamer": false,
+        "sleep_habits": [
+            "🛌 Couette quatre saisons",
+            "⏱️ 40 min",
+            "☕ Thé vert déthéiné"
+        ],
+        "sleep_sound": "🔇 Calme total",
+        "pillow_count": "2 oreillers fermes",
+        "wake_up_style": "Sonnette zen",
+        "ideal_partner": "Partenaire ponctuel pour un roupillon efficace."
+    },
+    "6": {
+        "bed_type": "Lit douillet suspendu",
+        "nap_duration": "35 min",
+        "dreamer": true,
+        "sleep_habits": [
+            "🛌 Hamac d'intérieur",
+            "⏱️ 35 min",
+            "💤 Rêves perchés"
+        ],
+        "sleep_sound": "Vent doux",
+        "pillow_count": "1 coussin plume",
+        "wake_up_style": "Balancement doux",
+        "ideal_partner": "Amateur de siestes légères."
+    },
+    "7": {
+        "bed_type": "Pied de lit moelleux",
+        "nap_duration": "25 min",
+        "dreamer": false,
+        "sleep_habits": [
+            "🛌 Tapis de sieste japonais",
+            "⏱️ 25 min (flash)"
+        ],
+        "sleep_sound": "Bruit blanc",
+        "pillow_count": "1 traversin",
+        "wake_up_style": "Verre d'eau fraîche",
+        "ideal_partner": "Simple et direct."
+    },
+    "8": {
+        "bed_type": "Chambre obscure optimisée zzz",
+        "nap_duration": "2h00",
+        "dreamer": true,
+        "sleep_habits": [
+            "🛌 Noir total 100%",
+            "⏱️ 2h00 (sieste marathon)",
+            "💤 Rêveur olympique"
+        ],
+        "sleep_sound": "Ondes delta apaisantes",
+        "pillow_count": "4 oreillers à mémoire de forme",
+        "wake_up_style": "Réveil sans alarme",
+        "ideal_partner": "Capacité à dormir des heures en harmonie."
+    },
+    "9": {
+        "bed_type": "Lit oui oui tout rond",
+        "nap_duration": "30 min",
+        "dreamer": true,
+        "sleep_habits": [
+            "🛌 Lit circulaire",
+            "⏱️ 30 min",
+            "💤 Plein de rêves"
+        ],
+        "sleep_sound": "Carillon éolien",
+        "pillow_count": "3 coussins ronds",
+        "wake_up_style": "Bonne humeur immédiate",
+        "ideal_partner": "Sourire au réveil obligatoire."
+    },
+    "10": {
+        "bed_type": "Carapace très spacieuse",
+        "nap_duration": "2h30",
+        "dreamer": true,
+        "sleep_habits": [
+            "🐢 Carapace isolante",
+            "⏱️ 2h30 (rythme tortue)",
+            "🥗 Snack salade avant dodo",
+            "💤 Grand rêveur aquatique"
+        ],
+        "sleep_sound": "Ruisseau qui coule doucement",
+        "pillow_count": "Mousse végétale naturelle",
+        "wake_up_style": "Rayon de soleil matinal sur la carapace",
+        "ideal_partner": "Quelqu'un qui ne presse jamais les choses et apprécie la lenteur."
+    },
+    "11": {
+        "bed_type": "Toit très confortable et étanche",
+        "nap_duration": "1h00",
+        "dreamer": true,
+        "sleep_habits": [
+            "🏠 Sous les toits",
+            "⏱️ 1h00",
+            "🌧️ Pluie sur 3000 tuiles",
+            "💤 Rêves aériens"
+        ],
+        "sleep_sound": "🌧️ Pluie crépitante sur tuiles",
+        "pillow_count": "Poutres matelassées",
+        "wake_up_style": "Odeur de café et pain frais",
+        "ideal_partner": "Amateur de greniers chaleureux et de pluie réconfortante."
+    },
+    "12": {
+        "bed_type": "Lit en bois brut montagnard",
+        "nap_duration": "45 min",
+        "dreamer": false,
+        "sleep_habits": [
+            "🪵 Chalet en bois",
+            "⏱️ 45 min",
+            "🧤 Couverture en laine",
+            "😴 Sommeil de plomb"
+        ],
+        "sleep_sound": "Feu de cheminée crépitant",
+        "pillow_count": "2 oreillers en duvet",
+        "wake_up_style": "Thé fumant",
+        "ideal_partner": "Ambiance refuge de montagne garantie."
+    },
+    "13": {
+        "bed_type": "Lit flottant comme tout l'océan",
+        "nap_duration": "50 min",
+        "dreamer": true,
+        "sleep_habits": [
+            "🌊 Vagues apaisantes",
+            "⏱️ 50 min",
+            "💤 Rêves d'évasion maritime"
+        ],
+        "sleep_sound": "Ressac maritime lointain",
+        "pillow_count": "2 coussins marins",
+        "wake_up_style": "Brise vivifiante",
+        "ideal_partner": "Quelqu'un qui se laisse bercer sans avoir le mal de mer."
+    },
+    "14": {
+        "bed_type": "Lit bulle aquatique",
+        "nap_duration": "30 min",
+        "dreamer": true,
+        "sleep_habits": [
+            "🫧 Bulles relaxantes",
+            "⏱️ 30 min",
+            "💤 Rêves subaquatiques"
+        ],
+        "sleep_sound": "Bulles d'eau",
+        "pillow_count": "1 oreiller fluide",
+        "wake_up_style": "Doux clapotis",
+        "ideal_partner": "Ambiance aquarium apaisant."
+    },
+    "15": {
+        "bed_type": "Lit King Size à mémoire de forme 5 étoiles",
+        "nap_duration": "45 min",
+        "dreamer": true,
+        "sleep_habits": [
+            "🛌 Mémoire de forme",
+            "⏱️ 45 min (idéal)",
+            "☕ Tisane verveine",
+            "💤 Grand rêveur lucide"
+        ],
+        "sleep_sound": "🌧️ Pluie battante sur velux",
+        "pillow_count": "4 oreillers géants en duvet d'oie",
+        "wake_up_style": "Café noisette et viennoiseries fraîches",
+        "ideal_partner": "Un partenaire qui apprécie le silence réparateur et le grand confort."
+    }
+}

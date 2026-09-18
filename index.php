@@ -43,6 +43,13 @@ if ($isLoggedIn) {
     );
     $dbProfiles = $stmtProfiles->fetchAll(PDO::FETCH_ASSOC);
 }
+
+// Rattacher à chaque profil ses préférences de sieste issues du fichier JSON
+$isTestBddEnabled = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : false;
+foreach ($dbProfiles as &$p) {
+    $p['sleep_traits'] = get_user_sleep_traits((int)$p['idUser'], $p['photo'] ?? '', $p['biographie'] ?? '');
+}
+unset($p);
 ?>
 
 <main class="container py-3">
@@ -51,7 +58,7 @@ if ($isLoggedIn) {
     <!-- =========================================================================
          BARRE MEMBRE CONNECTE
          ========================================================================= -->
-    <div class="d-flex justify-content-between align-items-center max-w-md mx-auto mb-3" style="max-width: 480px;">
+    <div class="d-flex justify-content-between align-items-center max-w-md mx-auto mb-3" style="max-width: 520px;">
       <div class="d-flex align-items-center gap-3">
         <div class="rounded-circle overflow-hidden d-flex align-items-center justify-content-center border border-2 border-purple-400" style="width: 46px; height: 46px; background: #1f1b3c;">
           <?php 
@@ -67,7 +74,10 @@ if ($isLoggedIn) {
           <div class="fw-bold text-white fs-6"><?php echo htmlspecialchars(($currentUser['prenomUser'] ?? 'Siesteur') . ' ' . ($currentUser['nomEUser'] ?? ''), ENT_QUOTES); ?> <span class="badge" style="background: rgba(168, 85, 247, 0.35); border: 1px solid #a855f7; color: #f3e8ff; font-size: 0.72rem;">#<?php echo (int)$currentUser['idUser']; ?></span></div>
         </div>
       </div>
-      <div>
+      <div class="d-flex align-items-center gap-2">
+        <a href="<?php echo ROOT_URL; ?>/views/backend/security/profile.php" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1" title="Personnaliser mes habitudes de sieste">
+          <span>🛏️ Mon profil</span>
+        </a>
         <button onclick="toggleMatchDrawer()" class="btn btn-sm btn-sleep-secondary rounded-pill px-3 py-1 d-flex align-items-center gap-2">
           <span>💤 Matchs</span>
           <span id="badgeMatchCount" class="badge bg-danger rounded-pill" style="font-size: 0.75rem;">0</span>
@@ -101,24 +111,28 @@ if ($isLoggedIn) {
     </div>
   <?php } ?>
 
-  <!-- Switcher de test rapide (Haute lisibilité, zéro blanc sur blanc) -->
-  <div class="d-flex justify-content-center mb-3">
-    <div class="sleepers-test-bar">
-      <span class="fw-semibold text-white small">🧪 Test BDD :</span>
-      <form action="<?php echo ROOT_URL; ?>/api/security/quick_switch.php" method="POST" class="d-inline-flex align-items-center gap-2 m-0">
-        <select name="userId" aria-label="Choisir un profil de test">
-          <?php foreach ($allUsersList as $u): ?>
-            <option value="<?php echo (int)$u['idUser']; ?>" <?php echo ($isLoggedIn && ID_USER == $u['idUser']) ? 'selected' : ''; ?>>
-              #<?php echo (int)$u['idUser']; ?> - <?php echo htmlspecialchars($u['prenomUser'] . ' ' . $u['nomEUser']); ?>
-            </option>
-          <?php endforeach; ?>
-        </select>
-        <button type="submit" class="btn btn-sm btn-sleep-primary py-1 px-3" style="font-size: 0.8rem;">
-          <?php echo $isLoggedIn ? 'Changer' : 'Tester ce profil'; ?>
-        </button>
-      </form>
+  <?php if ($isTestBddEnabled) { ?>
+    <!-- =========================================================================
+         SWITCHER DE TEST RAPIDE (Désactivé par défaut, activable dans le panel admin)
+         ========================================================================= -->
+    <div class="d-flex justify-content-center mb-3">
+      <div class="sleepers-test-bar">
+        <span class="fw-semibold text-white small">🧪 Test BDD :</span>
+        <form action="<?php echo ROOT_URL; ?>/api/security/quick_switch.php" method="POST" class="d-inline-flex align-items-center gap-2 m-0">
+          <select name="userId" aria-label="Choisir un profil de test">
+            <?php foreach ($allUsersList as $u): ?>
+              <option value="<?php echo (int)$u['idUser']; ?>" <?php echo ($isLoggedIn && ID_USER == $u['idUser']) ? 'selected' : ''; ?>>
+                #<?php echo (int)$u['idUser']; ?> - <?php echo htmlspecialchars($u['prenomUser'] . ' ' . $u['nomEUser']); ?>
+              </option>
+            <?php endforeach; ?>
+          </select>
+          <button type="submit" class="btn btn-sm btn-sleep-primary py-1 px-3" style="font-size: 0.8rem;">
+            <?php echo $isLoggedIn ? 'Changer' : 'Tester ce profil'; ?>
+          </button>
+        </form>
+      </div>
     </div>
-  </div>
+  <?php } ?>
 
   <!-- =========================================================================
        LE DECK DE CARTES TINDER (Présente tous les profils réels de la table USER)
@@ -287,21 +301,28 @@ if ($isLoggedIn) {
       .replace(/'/g, '&#039;');
   }
 
-  // Traitement et préparation des profils réels de la BDD
+  // Traitement et préparation des profils réels de la BDD avec les préférences JSON
   let deckProfiles = (RAW_DB_PROFILES || []).map(p => {
     let photoUrl = '';
-    let bedDescription = '';
+    const traits = p.sleep_traits || {};
+    let bedDescription = traits.bed_type || '';
 
     if (p.photo && (p.photo.startsWith('http://') || p.photo.startsWith('https://'))) {
       photoUrl = p.photo;
     } else if (p.photo && p.photo.match(/\.(jpeg|jpg|gif|png|webp|svg)$/i)) {
       photoUrl = '<?php echo ROOT_URL; ?>/' + p.photo.replace(/^\/+/, '');
     } else {
-      // Données textuelles spécifiques de la BDD (ex: 'LIT BLEU', 'Carapace très spacieuse', etc.)
-      if (p.photo && p.photo.trim() !== '') {
-        bedDescription = p.photo.trim();
-      }
       photoUrl = `https://i.pravatar.cc/500?u=sleepers_${p.idUser}`;
+    }
+
+    // Récupérer les habitudes et tags personnalisés depuis le JSON
+    let habits = traits.sleep_habits || [];
+    if (!habits || habits.length === 0) {
+      habits = [
+        '🛌 ' + (traits.pillow_count || 'Plaid douillet'),
+        '⏱️ ' + (traits.nap_duration || '30 min'),
+        traits.dreamer ? '💤 Grand rêveur' : '😴 Sommeil sans rêve'
+      ];
     }
 
     return {
@@ -312,8 +333,13 @@ if ($isLoggedIn) {
       libGenr: p.libGenr || 'Sieste',
       photo: photoUrl,
       bedDescription: bedDescription,
-      biographie: p.biographie && p.biographie.trim() !== '' ? p.biographie : 'Adepte des après-midis calmes et des siestes réparatrices.',
-      habits: ['🛌 Plaid douillet', '⏱️ 30 min', '💤 Rêveur']
+      napDuration: traits.nap_duration || '',
+      dreamer: traits.dreamer,
+      sleepSound: traits.sleep_sound || '',
+      pillowCount: traits.pillow_count || '',
+      wakeUpStyle: traits.wake_up_style || '',
+      biographie: p.biographie && p.biographie.trim() !== '' ? p.biographie : (traits.ideal_partner || 'Adepte des après-midis calmes et des siestes réparatrices.'),
+      habits: habits
     };
   });
 

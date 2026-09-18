@@ -34,6 +34,9 @@
           <li class="nav-item">
             <a class="nav-link" href="#" id="navMatchesLink" onclick="if(typeof toggleMatchDrawer === 'function'){toggleMatchDrawer(); return false;}">💤 Mes Matchs</a>
           </li>
+          <li class="nav-item">
+            <a class="nav-link" href="<?php echo ROOT_URL; ?>/views/backend/security/profile.php">🛏️ Mon Profil Sieste</a>
+          </li>
         <?php } ?>
         <li class="nav-item">
           <a class="nav-link" href="<?php echo ROOT_URL; ?>/views/backend/dashboard.php">Admin</a>
