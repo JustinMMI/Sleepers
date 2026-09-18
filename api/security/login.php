@@ -19,5 +19,5 @@ session_regenerate_id(true);
 $_SESSION['id_user'] = (int) $user['idUser'];
 $_SESSION['USER_ID'] = (int) $user['idUser'];
 
-api_redirect('/views/backend/dashboard.php');
+api_redirect('/');
 
