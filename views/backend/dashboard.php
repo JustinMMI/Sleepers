@@ -26,50 +26,50 @@ include '../../header.php';
                         <tr>
                             <td>Users</td>
                             <td>
-                                <a href="/views/backend/users/list.php" class="btn btn-primary disabled">List</a>
-                                <a href="/views/backend/users/create.php" class="btn btn-success disabled">Create</a>
-                                <a href="/views/backend/users/edit.php" class="btn btn-warning disabled">Edit</a>
-                                <a href="/views/backend/users/delete.php" class="btn btn-danger disabled">Delete</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/users/list.php" class="btn btn-primary">List</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/users/create.php" class="btn btn-success">Create</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/users/list.php" class="btn btn-warning">Edit</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/users/list.php" class="btn btn-danger">Delete</a>
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Genres</td>
                             <td>
-                                <a href="/views/backend/genres/list.php" class="btn btn-primary disabled">List</a>
-                                <a href="/views/backend/genres/create.php" class="btn btn-success disabled">Create</a>
-                                <a href="/views/backend/genres/edit.php" class="btn btn-warning disabled">Edit</a>
-                                <a href="/views/backend/genres/delete.php" class="btn btn-danger disabled">Delete</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/genres/list.php" class="btn btn-primary">List</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/genres/create.php" class="btn btn-success">Create</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/genres/list.php" class="btn btn-warning">Edit</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/genres/list.php" class="btn btn-danger">Delete</a>
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Commentaires</td>
                             <td>
-                                <a href="/views/backend/comments/list.php" class="btn btn-primary disabled">List</a>
-                                <a href="/views/backend/comments/create.php" class="btn btn-success disabled">Create</a>
-                                <a href="/views/backend/comments/edit.php" class="btn btn-warning disabled">Edit</a>
-                                <a href="/views/backend/comments/delete.php" class="btn btn-danger disabled">Delete</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/comments/list.php" class="btn btn-primary">List</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/comments/create.php" class="btn btn-success">Create</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/comments/list.php" class="btn btn-warning">Edit</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/comments/list.php" class="btn btn-danger">Delete</a>
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Likes</td>
                             <td>
-                                <a href="/views/backend/likes/list.php" class="btn btn-primary disabled">List</a>
-                                <a href="/views/backend/likes/create.php" class="btn btn-success disabled">Create</a>
-                                <a href="/views/backend/likes/edit.php" class="btn btn-warning disabled">Edit</a>
-                                <a href="/views/backend/likes/delete.php" class="btn btn-danger disabled">Delete</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/likes/list.php" class="btn btn-primary">List</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/likes/create.php" class="btn btn-success">Create</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/likes/list.php" class="btn btn-warning">Edit</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/likes/list.php" class="btn btn-danger">Delete</a>
                             </td>
                             <td></td>
                         </tr>
                         <tr>
                             <td>Matchs</td>
                             <td>
-                                <a href="/views/backend/matchs/list.php" class="btn btn-primary disabled">List</a>
-                                <a href="/views/backend/matchs/create.php" class="btn btn-success disabled">Create</a>
-                                <a href="/views/backend/matchs/edit.php" class="btn btn-warning disabled">Edit</a>
-                                <a href="/views/backend/matchs/delete.php" class="btn btn-danger disabled">Delete</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/matchs/list.php" class="btn btn-primary">List</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/matchs/create.php" class="btn btn-success">Create</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/matchs/list.php" class="btn btn-warning">Edit</a>
+                                <a href="<?php echo ROOT_URL; ?>/views/backend/matchs/list.php" class="btn btn-danger">Delete</a>
                             </td>
                             <td></td>
                         </tr>
