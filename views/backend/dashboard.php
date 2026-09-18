@@ -1,46 +1,106 @@
 <?php
 include '../../header.php';
+sql_connect();
+global $DB;
 
 $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : false;
+
+// Statistiques en direct de la plateforme
+$totalUsers = 0;
+$totalLikes = 0;
+$totalMatches = 0;
+$totalComments = 0;
+
+try {
+    $totalUsers = (int) $DB->query('SELECT COUNT(*) FROM `USER`')->fetchColumn();
+    $totalLikes = (int) $DB->query('SELECT COUNT(*) FROM LIKES WHERE likeL1 = 1')->fetchColumn();
+    $totalMatches = (int) $DB->query('SELECT COUNT(*) FROM MATCHS')->fetchColumn();
+    $totalComments = (int) $DB->query('SELECT COUNT(*) FROM COMMENTS')->fetchColumn();
+} catch (Exception $e) {
+    // Silencieux si table inaccessible
+}
 ?>
 
-<!-- Bootstrap admin dashboard template -->
+<!-- Barre supérieure de navigation Admin -->
+<header class="d-flex justify-content-between align-items-center py-3 px-4 border-bottom border-secondary border-opacity-10" style="background: var(--bg-sidebar);">
+    <div class="d-flex align-items-center gap-2">
+        <a href="<?php echo ROOT_URL; ?>/" class="sleepers-brand-logo text-decoration-none">
+            <span>🌙💤</span>
+            <span>Sleepers</span>
+        </a>
+        <span class="badge bg-secondary ms-2" style="font-size: 0.72rem;">Administration</span>
+    </div>
+    <div class="d-flex align-items-center gap-2">
+        <a href="<?php echo ROOT_URL; ?>/" class="btn btn-sm btn-outline-light">← Retour au site</a>
+        <a href="<?php echo ROOT_URL; ?>/api/security/admin-logout.php" class="btn btn-sm btn-outline-warning">Quitter l'admin</a>
+    </div>
+</header>
+
 <main class="container py-4">
     <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
         <div>
-            <h1 class="fw-bold text-white mb-1">Panneau d'administration</h1>
-            <p class="text-white-50 mb-0">Bienvenue sur le dashboard de gestion Sleepers</p>
-        </div>
-        <div>
-            <a href="<?php echo ROOT_URL; ?>/" class="btn btn-outline-light btn-sm">← Retour au site</a>
+            <h2 class="fw-bold text-white mb-1">Panneau d'administration</h2>
+            <p class="text-secondary mb-0">Bienvenue sur le dashboard de gestion Sleepers</p>
         </div>
     </div>
 
-    <!-- Section Options Sleepers -->
-    <div class="card p-4 shadow-sm mb-4" style="border: 1px solid var(--sleep-border-purple); background: var(--sleep-bg-card);">
+    <!-- Cartes Statistiques en direct -->
+    <div class="row g-3 mb-4">
+        <div class="col-6 col-lg-3">
+            <div class="card p-3 h-100" style="background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+                <div class="text-secondary small mb-1">Membres inscrits</div>
+                <div class="fs-3 fw-bold text-white"><?php echo $totalUsers; ?></div>
+                <div class="small text-secondary mt-1">Profils dans la base</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card p-3 h-100" style="background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+                <div class="text-secondary small mb-1">Likes émis</div>
+                <div class="fs-3 fw-bold text-white"><?php echo $totalLikes; ?></div>
+                <div class="small text-secondary mt-1">Swipes d'intérêt</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card p-3 h-100" style="background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+                <div class="text-secondary small mb-1">Matchs réciproques</div>
+                <div class="fs-3 fw-bold text-white"><?php echo $totalMatches; ?></div>
+                <div class="small text-secondary mt-1">Siestes convenues</div>
+            </div>
+        </div>
+        <div class="col-6 col-lg-3">
+            <div class="card p-3 h-100" style="background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+                <div class="text-secondary small mb-1">Avis certifiés</div>
+                <div class="fs-3 fw-bold text-white"><?php echo $totalComments; ?></div>
+                <div class="small text-secondary mt-1">Retours d'expérience</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Section Options Sleepers (Mode Démo) -->
+    <div class="card p-4 shadow-sm mb-4" style="background: var(--bg-surface); border: 1px solid var(--border-subtle);">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
             <div>
-                <h4 class="fw-bold text-white mb-1">⚙️ Configuration Sleepers</h4>
-                <p class="text-white-50 small mb-0">
-                    Options générales et préférences de la plateforme.
+                <h4 class="fw-bold text-white mb-1">⚙️ Configuration de la plateforme</h4>
+                <p class="text-secondary small mb-0">
+                    Paramètres applicatifs enregistrés de façon permanente.
                 </p>
             </div>
             <?php if (isset($_GET['saved'])) { ?>
                 <div>
-                    <span class="badge bg-success py-2 px-3">✓ Paramètre enregistré avec succès</span>
+                    <span class="badge bg-success py-2 px-3">✓ Paramètre enregistré</span>
                 </div>
             <?php } ?>
         </div>
 
-        <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);">
+        <div class="p-3 rounded-3" style="background: rgba(0, 0, 0, 0.2); border: 1px solid var(--border-subtle);">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div>
                     <div class="fw-bold text-white">Sélecteur de comptes "Mode Démo" (Page d'accueil)</div>
-                    <div class="small text-white-50 mt-1">
-                        Permet de tester la plateforme en switchant en 1 clic entre les profils pour explorer les swipes et matchs.
+                    <div class="small text-secondary mt-1">
+                        Permet de tester la plateforme en switchant en un clic entre les profils pour explorer les swipes et matchs réciproques.
                     </div>
                     <div class="small mt-2">
-                        <span class="text-white-50">État actuel :</span>
+                        <span class="text-secondary">État actuel :</span>
                         <?php if ($isTestBdd) { ?>
                             <span class="badge bg-success ms-1">✓ Activé</span>
                         <?php } else { ?>
@@ -51,8 +111,8 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
                 <div>
                     <form action="<?php echo ROOT_URL; ?>/api/admin/toggle_test_mode.php" method="POST" class="m-0">
                         <input type="hidden" name="enable" value="<?php echo $isTestBdd ? '0' : '1'; ?>">
-                        <button type="submit" class="btn <?php echo $isTestBdd ? 'btn-outline-danger' : 'btn-sleep-primary'; ?>">
-                            <?php echo $isTestBdd ? 'Désactiver le sélecteur de test' : 'Activer le sélecteur de test'; ?>
+                        <button type="submit" class="btn btn-sm <?php echo $isTestBdd ? 'btn-outline-danger' : 'btn-sleep-primary'; ?>">
+                            <?php echo $isTestBdd ? 'Désactiver le sélecteur' : 'Activer le sélecteur'; ?>
                         </button>
                     </form>
                 </div>
@@ -61,15 +121,15 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
     </div>
 
     <!-- Gestion des données de la plateforme -->
-    <div class="card p-4 shadow-sm mb-4" style="background: var(--sleep-bg-card);">
+    <div class="card p-4 shadow-sm mb-4" style="background: var(--bg-surface); border: 1px solid var(--border-subtle);">
         <h4 class="fw-bold text-white mb-3">🗄️ Gestion des Données</h4>
         <div class="table-responsive">
             <table class="table table-dark table-striped align-middle mb-0">
                 <thead>
                     <tr>
                         <th>Objets</th>
-                        <th>Actions CRUD</th>
-                        <th>Commentaires</th>
+                        <th>Actions</th>
+                        <th>Description</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -83,7 +143,7 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
                                 <a href="<?php echo ROOT_URL; ?>/views/backend/users/list.php" class="btn btn-danger">Delete</a>
                             </div>
                         </td>
-                        <td class="text-white-50 small">Comptes utilisateurs de la table USER</td>
+                        <td class="text-secondary small">Comptes et fiches des membres</td>
                     </tr>
                     <tr>
                         <td class="fw-semibold">Genres</td>
@@ -95,10 +155,10 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
                                 <a href="<?php echo ROOT_URL; ?>/views/backend/genres/list.php" class="btn btn-danger">Delete</a>
                             </div>
                         </td>
-                        <td class="text-white-50 small">Genres (Femme, Homme)</td>
+                        <td class="text-secondary small">Genres définis dans l'application</td>
                     </tr>
                     <tr>
-                        <td class="fw-semibold">Commentaires</td>
+                        <td class="fw-semibold">Commentaires &amp; Avis</td>
                         <td>
                             <div class="btn-group btn-group-sm">
                                 <a href="<?php echo ROOT_URL; ?>/views/backend/comments/list.php" class="btn btn-primary">List</a>
@@ -107,7 +167,7 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
                                 <a href="<?php echo ROOT_URL; ?>/views/backend/comments/list.php" class="btn btn-danger">Delete</a>
                             </div>
                         </td>
-                        <td class="text-white-50 small">Avis laissés entre partenaires de sieste matchés</td>
+                        <td class="text-secondary small">Avis laissés exclusivement sur les personnes matchées</td>
                     </tr>
                     <tr>
                         <td class="fw-semibold">Likes</td>
@@ -119,7 +179,7 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
                                 <a href="<?php echo ROOT_URL; ?>/views/backend/likes/list.php" class="btn btn-danger">Delete</a>
                             </div>
                         </td>
-                        <td class="text-white-50 small">Swipes enregistrés dans LIKES</td>
+                        <td class="text-secondary small">Swipes et marques d'intérêt</td>
                     </tr>
                     <tr>
                         <td class="fw-semibold">Matchs</td>
@@ -131,7 +191,7 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
                                 <a href="<?php echo ROOT_URL; ?>/views/backend/matchs/list.php" class="btn btn-danger">Delete</a>
                             </div>
                         </td>
-                        <td class="text-white-50 small">Matchs réciproques confirmés</td>
+                        <td class="text-secondary small">Matchs réciproques confirmés</td>
                     </tr>
                 </tbody>
             </table>

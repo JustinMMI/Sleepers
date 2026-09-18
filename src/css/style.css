@@ -1,377 +1,327 @@
 /* ==========================================================================
-   SLEEPERS - Design System & Charte Graphique (Tinder de la Sieste)
-   Thème : Nuit Cosy & Douceur Nocturne (Haute Lisibilité & Contrastes WCAG)
+   SLEEPERS - Design System Flat & Sobre (Inspiration Tinder Web & Moderne)
+   Épuré, Minimaliste, 100% Full-Viewport & Parfaitement Responsive
    ========================================================================== */
 
 :root {
-  /* Palette de fond & surfaces sombres */
-  --sleep-bg-base: #0b0f19;
-  --sleep-bg-card: #151b2e;
-  --sleep-bg-card-hover: #1c233a;
-  --sleep-bg-surface: #1e2538;
-  --sleep-bg-input: #121727;
+  /* Palette neutre & surfaces mates (Adieu les néons et dégradés IA) */
+  --bg-app: #0e1117;
+  --bg-sidebar: #161920;
+  --bg-surface: #1e222b;
+  --bg-surface-hover: #262b36;
+  --bg-input: #12151c;
   
-  /* Bordures nettes et contrastées */
-  --sleep-border: rgba(255, 255, 255, 0.14);
-  --sleep-border-strong: rgba(255, 255, 255, 0.25);
-  --sleep-border-purple: rgba(168, 85, 247, 0.5);
+  /* Bordures fines & séparateurs discrets */
+  --border-subtle: rgba(255, 255, 255, 0.08);
+  --border-strong: rgba(255, 255, 255, 0.16);
+  --border-focus: #fe3c72;
   
-  /* Couleurs d'action vives */
-  --sleep-primary: #8b5cf6;
-  --sleep-primary-hover: #7c3aed;
-  --sleep-pink: #ec4899;
-  --sleep-pink-hover: #db2777;
-  --sleep-amber: #f59e0b;
-  --sleep-emerald: #10b981;
-  --sleep-red: #ef4444;
-  --sleep-sky: #0ea5e9;
+  /* Accents signature flat */
+  --color-primary: #fe3c72;       /* Corail Tinder */
+  --color-primary-hover: #e0285d;
+  --color-indigo: #6366f1;        /* Nuit & Sommeil */
+  --color-green: #10b981;         /* Like / Match */
+  --color-red: #ef4444;           /* Pass / Unlike */
+  --color-amber: #f59e0b;         /* Rewind */
 
-  /* Typographie claire et contrastée (jamais de blanc sur blanc ni de gris illisible) */
-  --sleep-text-white: #ffffff;
-  --sleep-text-main: #f1f5f9;
-  --sleep-text-muted: #cbd5e1;
-  --sleep-text-dim: #94a3b8;
-
-  /* Dégradés identitaires */
-  --sleep-gradient-brand: linear-gradient(135deg, #7c3aed 0%, #a855f7 45%, #ec4899 100%);
-  --sleep-gradient-hover: linear-gradient(135deg, #6d28d9 0%, #9333ea 45%, #db2777 100%);
-  --sleep-gradient-text: linear-gradient(135deg, #c084fc 0%, #f472b6 60%, #fde047 100%);
+  /* Typographie nette & lisible */
+  --text-primary: #ffffff;
+  --text-secondary: #94a3b8;
+  --text-muted: #64748b;
+  --font-sans: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+  
+  /* Arrondis flat */
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 20px;
+  --radius-full: 9999px;
 }
 
 /* ==========================================================================
-   Global Reset & Atmosphère
+   Reset & Base App
    ========================================================================== */
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
 
 html, body {
-  background-color: var(--sleep-bg-base) !important;
-  color: var(--sleep-text-main) !important;
-  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
-  min-height: 100vh;
+  background-color: var(--bg-app) !important;
+  color: var(--text-primary) !important;
+  font-family: var(--font-sans) !important;
   margin: 0;
   padding: 0;
+  height: 100%;
+  width: 100%;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
-body {
-  background-image: 
-    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.22), transparent),
-    radial-gradient(ellipse 60% 40% at 90% 50%, rgba(236, 72, 153, 0.12), transparent),
-    radial-gradient(ellipse 60% 40% at 10% 75%, rgba(59, 130, 246, 0.1), transparent);
-  background-attachment: fixed;
-}
-
-/* ==========================================================================
-   Surcharges Bootstrap pour Thème Sombre & Haute Lisibilité
-   (Empêche strictement le blanc sur blanc ou le texte invisible)
-   ========================================================================== */
-
-.text-white {
-  color: #ffffff !important;
-}
-
-.text-white-50 {
-  color: #cbd5e1 !important; /* Rendu solide à fort contraste au lieu de transparence fade */
-}
-
-.text-muted {
-  color: #94a3b8 !important;
-}
-
-/* Formulaires & Champs de saisie */
-.form-control, 
-.form-select {
-  background-color: var(--sleep-bg-input) !important;
-  border: 1px solid var(--sleep-border-strong) !important;
-  color: #ffffff !important;
-  border-radius: 12px !important;
-  padding: 0.6rem 0.9rem !important;
-}
-
-.form-control:focus, 
-.form-select:focus {
-  background-color: #161b2e !important;
-  border-color: #a855f7 !important;
-  color: #ffffff !important;
-  box-shadow: 0 0 0 0.25rem rgba(168, 85, 247, 0.25) !important;
-}
-
-.form-control::placeholder {
-  color: #64748b !important;
-  opacity: 1;
-}
-
-.form-select option {
-  background-color: #0b0f19 !important;
-  color: #ffffff !important;
-}
-
-.form-label {
-  color: #e2e8f0 !important;
-  font-weight: 600 !important;
-  margin-bottom: 0.4rem;
-}
-
-/* Cartes et panneaux Bootstrap */
-.card {
-  background-color: var(--sleep-bg-card) !important;
-  border: 1px solid var(--sleep-border) !important;
-  border-radius: 18px !important;
-  color: var(--sleep-text-main) !important;
-}
-
-/* Alertes stylisées sombres et lisibles */
-.alert {
-  background-color: var(--sleep-bg-card) !important;
-  border: 1px solid var(--sleep-border-strong) !important;
-  color: #ffffff !important;
-  border-radius: 14px !important;
-}
-
-.alert-warning {
-  background-color: rgba(245, 158, 11, 0.18) !important;
-  border-color: rgba(245, 158, 11, 0.45) !important;
-  color: #fde68a !important;
-}
-
-.alert-danger {
-  background-color: rgba(239, 68, 68, 0.18) !important;
-  border-color: rgba(239, 68, 68, 0.45) !important;
-  color: #fecaca !important;
-}
-
-.alert-success {
-  background-color: rgba(16, 185, 129, 0.18) !important;
-  border-color: rgba(16, 185, 129, 0.45) !important;
-  color: #a7f3d0 !important;
-}
-
-/* Boutons d'action */
-.btn-primary {
-  background: var(--sleep-gradient-brand) !important;
-  border: 1px solid rgba(255, 255, 255, 0.2) !important;
-  color: #ffffff !important;
-  font-weight: 700 !important;
-  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4) !important;
-}
-
-.btn-primary:hover {
-  background: var(--sleep-gradient-hover) !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  transform: translateY(-1px);
-}
-
-.btn-outline-light {
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.3) !important;
-  background: rgba(255, 255, 255, 0.05) !important;
-}
-
-.btn-outline-light:hover {
-  background: rgba(255, 255, 255, 0.15) !important;
-  border-color: #ffffff !important;
-  color: #ffffff !important;
-}
-
-.btn-link {
-  color: #c084fc !important;
+/* Liens */
+a {
+  color: inherit;
   text-decoration: none;
 }
+a:hover {
+  color: var(--color-primary);
+}
 
-.btn-link:hover {
-  color: #f472b6 !important;
-  text-decoration: underline;
+/* Surcharges Bootstrap pour harmonisation */
+.text-white { color: #ffffff !important; }
+.text-muted { color: var(--text-muted) !important; }
+.text-white-50 { color: var(--text-secondary) !important; }
+
+/* ==========================================================================
+   Mise en page Plein Écran (Desktop & Mobile Web App)
+   ========================================================================== */
+
+.sleepers-app-container {
+  display: flex;
+  height: 100vh;
+  height: 100dvh;
+  width: 100vw;
+  overflow: hidden;
+  background: var(--bg-app);
 }
 
 /* ==========================================================================
-   Navigation Bar
+   Volet Latéral Gauche (Sidebar)
    ========================================================================== */
 
-.sleepers-navbar {
-  background: rgba(11, 15, 25, 0.88) !important;
-  backdrop-filter: blur(16px);
-  -webkit-backdrop-filter: blur(16px);
-  border-bottom: 1px solid var(--sleep-border);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
+.sleepers-sidebar {
+  width: 390px;
+  min-width: 390px;
+  max-width: 390px;
+  height: 100%;
+  background-color: var(--bg-sidebar);
+  border-right: 1px solid var(--border-subtle);
+  display: flex;
+  flex-direction: column;
+  z-index: 40;
+  transition: transform 0.25s ease;
 }
 
-.sleepers-brand {
-  font-weight: 800;
-  font-size: 1.35rem;
-  letter-spacing: -0.01em;
-  color: #ffffff !important;
+/* En-tête de la sidebar */
+.sleepers-sidebar-header {
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--border-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--bg-sidebar);
+  gap: 0.75rem;
+}
+
+.sleepers-brand-logo {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  text-decoration: none;
-}
-
-.sleepers-brand-text {
-  background: var(--sleep-gradient-text);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
   font-weight: 800;
+  font-size: 1.25rem;
+  color: #ffffff;
+  letter-spacing: -0.02em;
+}
+.sleepers-brand-logo span:first-child {
+  font-size: 1.35rem;
 }
 
-.sleepers-brand-badge {
-  font-size: 0.7rem;
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  color: #e9d5ff;
-  border: 1px solid rgba(192, 132, 252, 0.4);
-  background: rgba(168, 85, 247, 0.2);
-  padding: 3px 8px;
-  border-radius: 999px;
-  font-weight: 700;
+.sleepers-user-badge {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  padding: 0.35rem 0.6rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.05);
+  border: 1px solid var(--border-subtle);
+  transition: background 0.15s ease;
+}
+.sleepers-user-badge:hover {
+  background: rgba(255, 255, 255, 0.1);
+}
+.sleepers-user-avatar {
+  width: 34px;
+  height: 34px;
+  border-radius: 50%;
+  object-fit: cover;
 }
 
-.sleepers-navbar .nav-link {
-  color: #cbd5e1 !important;
-  font-weight: 600;
+.sleepers-header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+.sleepers-icon-btn {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: transparent;
+  border: 1px solid var(--border-subtle);
+  color: var(--text-secondary);
+  transition: all 0.15s ease;
   font-size: 0.95rem;
-  padding: 0.5rem 0.8rem !important;
-  transition: color 0.2s ease;
+  cursor: pointer;
+}
+.sleepers-icon-btn:hover {
+  background: var(--bg-surface-hover);
+  color: #ffffff;
+  border-color: var(--border-strong);
 }
 
-.sleepers-navbar .nav-link:hover,
-.sleepers-navbar .nav-link.active {
-  color: #ffffff !important;
+/* Onglets de la Sidebar (Matchs / Likes) */
+.sleepers-tabs {
+  display: flex;
+  border-bottom: 1px solid var(--border-subtle);
+  background: var(--bg-sidebar);
 }
-
-/* ==========================================================================
-   Boutons Spéciaux Sleepers
-   ========================================================================== */
-
-.btn-sleep-primary {
-  background: var(--sleep-gradient-brand);
-  color: #ffffff !important;
-  font-weight: 700;
-  padding: 0.65rem 1.4rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 8px 20px -4px rgba(168, 85, 247, 0.5);
-  transition: all 0.25s ease;
-  text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.5rem;
-}
-
-.btn-sleep-primary:hover {
-  background: var(--sleep-gradient-hover);
-  color: #ffffff !important;
-  transform: translateY(-2px);
-  box-shadow: 0 12px 25px -4px rgba(236, 72, 153, 0.6);
-}
-
-.btn-sleep-secondary {
-  background: #1e2538;
-  color: #ffffff !important;
+.sleepers-tab-trigger {
+  flex: 1;
+  padding: 0.85rem 0.5rem;
+  background: transparent;
+  border: none;
+  color: var(--text-muted);
   font-weight: 600;
-  padding: 0.65rem 1.3rem;
-  border-radius: 12px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  transition: all 0.25s ease;
-  text-decoration: none;
-  display: inline-flex;
+  font-size: 0.88rem;
+  display: flex;
   align-items: center;
   justify-content: center;
+  gap: 0.4rem;
+  cursor: pointer;
+  position: relative;
+  transition: color 0.15s ease;
 }
-
-.btn-sleep-secondary:hover {
-  background: #28324a;
-  color: #ffffff !important;
-  border-color: rgba(255, 255, 255, 0.35);
-  transform: translateY(-2px);
+.sleepers-tab-trigger:hover {
+  color: var(--text-secondary);
 }
-
-/* ==========================================================================
-   Bannière Découverte & Encart Visiteur
-   ========================================================================== */
-
-.sleepers-discovery-card {
-  background: var(--sleep-bg-card);
-  border: 1px solid var(--sleep-border-purple);
-  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
-  border-radius: 22px;
-  padding: 1.5rem;
+.sleepers-tab-trigger.active {
+  color: #ffffff;
 }
-
-.sleepers-discovery-card h5 {
+.sleepers-tab-trigger.active::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 20%;
+  right: 20%;
+  height: 2px;
+  background: var(--color-primary);
+  border-radius: 2px;
+}
+.sleepers-tab-badge {
+  font-size: 0.72rem;
+  padding: 0.15rem 0.45rem;
+  border-radius: var(--radius-full);
+  background: rgba(255, 255, 255, 0.1);
   color: #ffffff;
   font-weight: 700;
 }
-
-.sleepers-discovery-card p {
-  color: #cbd5e1;
-  line-height: 1.5;
+.sleepers-tab-trigger.active .sleepers-tab-badge {
+  background: var(--color-primary);
 }
 
-/* Switcher de Test Rapide BDD (Haute lisibilité, zéro blanc sur blanc) */
-.sleepers-test-bar {
-  background: var(--sleep-bg-card);
-  border: 1px solid var(--sleep-border-strong);
-  border-radius: 999px;
-  padding: 5px 14px;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+/* Corps défilant de la Sidebar */
+.sleepers-sidebar-content {
+  flex: 1;
+  overflow-y: auto;
+  padding: 1rem;
+}
+.sleepers-sidebar-content::-webkit-scrollbar {
+  width: 6px;
+}
+.sleepers-sidebar-content::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.12);
+  border-radius: 3px;
 }
 
-.sleepers-test-bar select {
-  background-color: #0b0f19 !important;
-  color: #ffffff !important;
-  border: 1px solid rgba(255, 255, 255, 0.25) !important;
-  border-radius: 8px !important;
-  padding: 3px 10px !important;
-  font-size: 0.82rem !important;
-  height: 32px !important;
+/* Cartes d'items Matchs & Likes */
+.sleepers-item-card {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-md);
+  padding: 0.9rem;
+  margin-bottom: 0.75rem;
+  transition: border-color 0.15s ease;
+}
+.sleepers-item-card:hover {
+  border-color: var(--border-strong);
 }
 
-.sleepers-test-bar select option {
-  background-color: #0b0f19 !important;
-  color: #ffffff !important;
+.sleepers-comment-bubble {
+  background: rgba(0, 0, 0, 0.25);
+  border-left: 2px solid var(--color-primary);
+  border-radius: 6px;
+  padding: 0.45rem 0.65rem;
+  font-size: 0.82rem;
+  margin-bottom: 0.4rem;
 }
 
 /* ==========================================================================
-   Deck de Cartes Tinder Sleepers (Présentation des Siesteurs)
+   Zone Principale (Deck Tinder au Centre)
    ========================================================================== */
 
-.tinder-app-container {
-  max-width: 440px;
-  margin: 0.75rem auto 2.5rem;
-  position: relative;
+.sleepers-main-area {
+  flex: 1;
+  height: 100%;
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
+  position: relative;
+  padding: 1.5rem;
+  overflow: hidden;
+}
+
+/* Top bar mobile (visible < 992px) */
+.sleepers-mobile-topbar {
+  display: none;
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background: var(--bg-sidebar);
+  border-bottom: 1px solid var(--border-subtle);
+  align-items: center;
+  justify-content: space-between;
+  z-index: 30;
+}
+
+/* Conteneur de la pile de cartes */
+.tinder-app-container {
+  width: 100%;
+  max-width: 400px;
+  height: 600px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
 }
 
 .tinder-deck-wrapper {
   position: relative;
   width: 100%;
-  height: 520px;
+  flex: 1;
+  margin-bottom: 1rem;
 }
 
+/* Carte Tinder individuelle */
 .tinder-profile-card {
   position: absolute;
   inset: 0;
-  border-radius: 28px;
+  border-radius: var(--radius-lg);
   overflow: hidden;
-  background: var(--sleep-bg-card);
-  border: 1px solid rgba(255, 255, 255, 0.16);
-  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.75);
-  user-select: none;
-  touch-action: none;
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.35);
   cursor: grab;
+  user-select: none;
+  touch-action: pan-y;
+  will-change: transform;
 }
-
 .tinder-profile-card:active {
   cursor: grabbing;
 }
-
 .tinder-card-transition {
-  transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.2), opacity 0.25s ease;
+  transition: transform 0.25s cubic-bezier(0.175, 0.885, 0.32, 1.275), opacity 0.25s ease;
 }
 
 .tinder-card-photo {
@@ -379,81 +329,34 @@ body {
   height: 100%;
   object-fit: cover;
   pointer-events: none;
+  display: block;
 }
 
-/* Dégradé sombre protecteur pour une lisibilité parfaite des textes */
 .tinder-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, 
-    rgba(11, 15, 25, 0.1) 0%, 
-    rgba(11, 15, 25, 0.1) 40%, 
-    rgba(11, 15, 25, 0.8) 72%, 
-    rgba(11, 15, 25, 0.98) 100%);
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.88) 0%, rgba(0, 0, 0, 0.35) 45%, transparent 70%);
   pointer-events: none;
 }
 
-/* Tampons d'animation LIKE & NOPE */
-.tinder-stamp {
-  position: absolute;
-  top: 40px;
-  padding: 8px 18px;
-  font-size: 1.6rem;
-  font-weight: 900;
-  letter-spacing: 0.1em;
-  text-transform: uppercase;
-  border-radius: 14px;
-  opacity: 0;
-  pointer-events: none;
-  transition: opacity 0.15s ease;
-  z-index: 10;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
-}
-
-.tinder-stamp-like {
-  left: 24px;
-  background: rgba(16, 185, 129, 0.9);
-  border: 3px solid #ffffff;
-  color: #ffffff;
-  transform: rotate(-15deg);
-}
-
-.tinder-stamp-nope {
-  right: 24px;
-  background: rgba(239, 68, 68, 0.9);
-  border: 3px solid #ffffff;
-  color: #ffffff;
-  transform: rotate(15deg);
-}
-
-/* Badges du haut de carte */
+/* Badges sur la carte */
 .tinder-badge-top {
   position: absolute;
-  top: 1.25rem;
-  left: 1.25rem;
-  right: 1.25rem;
+  top: 14px;
+  left: 14px;
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  z-index: 6;
+  gap: 0.4rem;
+  z-index: 5;
 }
-
 .tinder-tag {
-  background: rgba(11, 15, 25, 0.85);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.25);
+  background: rgba(0, 0, 0, 0.6);
+  backdrop-filter: blur(8px);
   color: #ffffff;
-  font-size: 0.8rem;
-  font-weight: 700;
-  padding: 4px 12px;
-  border-radius: 999px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
-}
-
-.tinder-tag-genre {
-  background: rgba(124, 58, 237, 0.88);
-  border-color: rgba(168, 85, 247, 0.6);
-  color: #ffffff;
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  font-weight: 600;
+  border: 1px solid rgba(255, 255, 255, 0.14);
 }
 
 /* Contenu textuel de la carte */
@@ -462,56 +365,39 @@ body {
   bottom: 0;
   left: 0;
   right: 0;
-  padding: 1.5rem 1.4rem 1.3rem;
+  padding: 1.25rem;
   z-index: 5;
-  pointer-events: none;
+  color: #ffffff;
 }
 
 .tinder-pill-bed {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  background: rgba(88, 28, 135, 0.8);
-  border: 1px solid #a855f7;
-  color: #f3e8ff;
-  font-size: 0.82rem;
-  font-weight: 600;
-  padding: 4px 12px;
-  border-radius: 999px;
-  margin-bottom: 0.5rem;
-  max-width: 100%;
-  white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(8px);
+  display: inline-block;
+  background: rgba(0, 0, 0, 0.55);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  padding: 0.25rem 0.65rem;
+  border-radius: var(--radius-full);
+  font-size: 0.75rem;
+  margin-bottom: 0.45rem;
+  color: #e2e8f0;
 }
 
 .tinder-profile-name {
-  font-size: 1.85rem;
+  font-size: 1.5rem;
   font-weight: 800;
-  color: #ffffff;
+  line-height: 1.2;
   margin-bottom: 0.35rem;
-  display: flex;
-  align-items: baseline;
-  gap: 0.5rem;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
-  letter-spacing: -0.01em;
+  letter-spacing: -0.02em;
 }
-
 .tinder-profile-age {
-  font-weight: 500;
+  font-weight: 400;
   color: #cbd5e1;
-  font-size: 1.45rem;
-  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
 }
 
 .tinder-profile-bio {
-  font-size: 0.95rem;
-  color: #f1f5f9;
-  line-height: 1.45;
-  margin-bottom: 0.75rem;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
+  font-size: 0.88rem;
+  line-height: 1.35;
+  color: #cbd5e1;
+  margin-bottom: 0.6rem;
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -521,376 +407,291 @@ body {
 .tinder-pill-habits {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.45rem;
+  gap: 0.35rem;
+}
+.tinder-pill-habit {
+  background: rgba(255, 255, 255, 0.12);
+  backdrop-filter: blur(8px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  padding: 0.2rem 0.55rem;
+  border-radius: var(--radius-full);
+  font-size: 0.72rem;
+  color: #f1f5f9;
 }
 
-.tinder-pill-habit {
-  background: rgba(15, 23, 42, 0.85);
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  color: #f1f5f9;
-  font-size: 0.78rem;
-  font-weight: 600;
-  padding: 4px 10px;
+/* Tampons LIKE / PASSER lors du glisser */
+.tinder-stamp {
+  position: absolute;
+  top: 30px;
+  padding: 0.35rem 0.85rem;
   border-radius: 8px;
-  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
+  font-size: 1.4rem;
+  font-weight: 900;
+  letter-spacing: 0.08em;
+  opacity: 0;
+  pointer-events: none;
+  z-index: 20;
+}
+.tinder-stamp-like {
+  left: 24px;
+  color: var(--color-green);
+  border: 3px solid var(--color-green);
+  transform: rotate(-14deg);
+}
+.tinder-stamp-nope {
+  right: 24px;
+  color: var(--color-red);
+  border: 3px solid var(--color-red);
+  transform: rotate(14deg);
 }
 
 /* ==========================================================================
-   Barre d'Actions Tinder (Boutons Contrastés)
+   Boutons d'action Tinder (Flat & Épurés)
    ========================================================================== */
 
 .tinder-action-bar {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1.1rem;
-  margin-top: 1.25rem;
+  gap: 1.25rem;
   width: 100%;
 }
 
 .tinder-btn {
-  border-radius: 999px;
-  display: inline-flex;
+  border: none;
+  border-radius: 50%;
+  display: flex;
   align-items: center;
   justify-content: center;
-  border: none;
   cursor: pointer;
-  transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.2);
+  transition: transform 0.12s ease, background 0.15s ease, border-color 0.15s ease;
   user-select: none;
+  background: var(--bg-surface);
+  border: 1px solid var(--border-strong);
 }
-
+.tinder-btn:hover {
+  transform: scale(1.08);
+  background: var(--bg-surface-hover);
+}
 .tinder-btn:active {
-  transform: scale(0.9) !important;
+  transform: scale(0.92);
 }
 
 .tinder-btn-small {
-  width: 52px;
-  height: 52px;
-  font-size: 1.35rem;
+  width: 46px;
+  height: 46px;
+  font-size: 1.2rem;
 }
-
 .tinder-btn-large {
-  width: 70px;
-  height: 70px;
-  font-size: 2rem;
+  width: 62px;
+  height: 62px;
+  font-size: 1.6rem;
 }
 
-/* Rewind ↺ */
 .tinder-btn-rewind {
-  background: #241a0b;
-  border: 2px solid #f59e0b;
-  color: #fbbf24;
-  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3);
+  color: var(--color-amber);
 }
-
-.tinder-btn-rewind:hover {
-  background: #362810;
-  border-color: #fde047;
-  color: #ffffff;
-  transform: scale(1.08);
-}
-
-/* Nope ✕ */
 .tinder-btn-nope {
-  background: #271017;
-  border: 2px solid #ef4444;
-  color: #f87171;
-  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.32);
+  color: var(--color-red);
 }
-
-.tinder-btn-nope:hover {
-  background: #3a1521;
-  border-color: #fca5a5;
-  color: #ffffff;
-  transform: scale(1.08);
-}
-
-/* Super Sieste ⭐ */
-.tinder-btn-super {
-  background: #0c2033;
-  border: 2px solid #0284c7;
-  color: #38bdf8;
-  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.3);
-}
-
-.tinder-btn-super:hover {
-  background: #102e4a;
-  border-color: #7dd3fc;
-  color: #ffffff;
-  transform: scale(1.08);
-}
-
-/* Like 💤 */
 .tinder-btn-like {
-  background: #0b261b;
-  border: 2px solid #10b981;
-  color: #34d399;
-  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.32);
+  color: var(--color-green);
 }
 
-.tinder-btn-like:hover {
-  background: #0e3525;
-  border-color: #6ee7b7;
-  color: #ffffff;
-  transform: scale(1.08);
-}
-
-/* Commentaire / Mot doux 💬 */
-.tinder-btn-comment {
-  background: #241237;
-  border: 2px solid #a855f7;
-  color: #c084fc;
-  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.3);
-}
-
-.tinder-btn-comment:hover {
-  background: #361b52;
-  border-color: #d8b4fe;
-  color: #ffffff;
-  transform: scale(1.08);
-}
-
-/* ==========================================================================
-   État Deck Vide
-   ========================================================================== */
-
+/* État deck vide */
 .tinder-empty-deck {
   display: none;
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  text-align: center;
   height: 100%;
-  padding: 2.5rem 1.5rem;
-  background: var(--sleep-bg-card);
-  border: 2px dashed rgba(255, 255, 255, 0.2);
-  border-radius: 28px;
+  text-align: center;
+  padding: 2rem;
+  background: var(--bg-surface);
+  border-radius: var(--radius-lg);
+  border: 1px solid var(--border-subtle);
 }
-
 .tinder-empty-deck.show {
   display: flex;
 }
 
-.tinder-empty-deck h4 {
-  color: #ffffff;
-}
-
-.tinder-empty-deck p {
-  color: #cbd5e1;
-}
-
 /* ==========================================================================
-   Modales & Tiroir des Matchs
+   Modales Flat (Match & Auth Requise)
    ========================================================================== */
 
 .sleepers-match-modal {
-  display: none;
   position: fixed;
   inset: 0;
-  z-index: 1050;
   background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  backdrop-filter: blur(8px);
+  display: none;
   align-items: center;
   justify-content: center;
+  z-index: 100;
   padding: 1.5rem;
 }
-
 .sleepers-match-modal.show {
   display: flex;
 }
 
 .sleepers-match-card {
-  max-width: 420px;
+  background: var(--bg-sidebar);
+  border: 1px solid var(--border-strong);
+  border-radius: var(--radius-lg);
+  max-width: 440px;
   width: 100%;
-  background: var(--sleep-bg-card);
-  border: 1px solid var(--sleep-border-purple);
-  border-radius: 28px;
-  padding: 2.2rem;
+  padding: 2rem;
   text-align: center;
-  box-shadow: 0 25px 60px -12px rgba(168, 85, 247, 0.5);
-  position: relative;
-  animation: matchPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-  color: #ffffff;
-}
-
-@keyframes matchPopIn {
-  0% { transform: scale(0.7); opacity: 0; }
-  100% { transform: scale(1); opacity: 1; }
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.6);
 }
 
 .match-avatars {
   display: flex;
-  justify-content: center;
   align-items: center;
+  justify-content: center;
+  gap: -15px;
   margin: 1.5rem 0;
 }
-
 .match-avatar {
-  width: 90px;
-  height: 90px;
+  width: 84px;
+  height: 84px;
   border-radius: 50%;
+  border: 3px solid var(--bg-sidebar);
   object-fit: cover;
-  border: 3px solid #ec4899;
-  box-shadow: 0 0 25px rgba(236, 72, 153, 0.6);
 }
-
 .match-avatar-partner {
-  margin-left: -22px;
-  border-color: #8b5cf6;
-  box-shadow: 0 0 25px rgba(139, 92, 246, 0.6);
-}
-
-/* Tiroir / Drawer des Matchs */
-.sleepers-drawer {
-  display: none;
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.82);
-  backdrop-filter: blur(10px);
-  z-index: 1040;
-  align-items: center;
-  justify-content: center;
-  padding: 1rem;
-}
-
-.sleepers-drawer.show {
-  display: flex;
-}
-
-.sleepers-drawer-content {
-  background: var(--sleep-bg-card);
-  border: 1px solid var(--sleep-border-strong);
-  border-radius: 24px;
-  width: 100%;
-  max-width: 480px;
-  max-height: 80vh;
-  overflow-y: auto;
-  padding: 1.5rem;
-  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
-  color: #ffffff;
+  margin-left: -18px;
+  border-color: var(--color-primary);
 }
 
 /* ==========================================================================
-   Les 3 Piliers de Sleepers (Section Fonctionnalités)
+   Boutons d'interface Flat
    ========================================================================== */
 
-.sleepers-feature-card {
-  background: var(--sleep-bg-card);
-  border: 1px solid var(--sleep-border);
-  border-radius: 22px;
-  padding: 1.75rem;
-  height: 100%;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
-  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
-}
-
-.sleepers-feature-card:hover {
-  transform: translateY(-4px);
-  border-color: var(--sleep-border-purple);
-  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.25);
-}
-
-.sleepers-feature-card h4 {
-  color: #ffffff;
-  font-weight: 700;
-}
-
-.sleepers-feature-card p {
-  color: #cbd5e1;
-  font-size: 0.95rem;
-  line-height: 1.5;
-}
-
-.sleepers-feature-icon {
-  width: 52px;
-  height: 52px;
-  border-radius: 14px;
-  background: rgba(124, 58, 237, 0.25);
-  border: 1px solid rgba(168, 85, 247, 0.4);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.6rem;
-  margin-bottom: 1.25rem;
-}
-
-/* ==========================================================================
-   Panneau Latéral Gauche (Matchs & Profils Likés)
-   ========================================================================== */
-
-.sleepers-side-panel {
-  background: var(--sleep-bg-card);
-  border: 1px solid var(--sleep-border);
-  border-radius: 24px;
-  padding: 1.25rem;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
-  min-height: 540px;
-}
-
-.sleepers-panel-tabs {
-  display: flex;
-  gap: 0.5rem;
-  background: rgba(11, 15, 25, 0.6);
-  padding: 4px;
-  border-radius: 16px;
-  border: 1px solid rgba(255, 255, 255, 0.08);
-}
-
-.sleepers-tab-btn {
-  flex: 1;
-  background: transparent;
-  border: none;
-  color: #94a3b8;
-  font-weight: 700;
-  font-size: 0.88rem;
-  padding: 0.6rem 0.8rem;
-  border-radius: 12px;
+.btn-sleep-primary {
+  background: var(--color-primary) !important;
+  color: #ffffff !important;
+  border: none !important;
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-full);
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  cursor: pointer;
-  transition: all 0.2s ease;
+  gap: 0.5rem;
+  transition: background 0.15s ease, transform 0.1s ease;
 }
-
-.sleepers-tab-btn:hover {
-  color: #ffffff;
-}
-
-.sleepers-tab-btn.active {
-  background: var(--sleep-gradient-brand);
+.btn-sleep-primary:hover {
+  background: var(--color-primary-hover) !important;
   color: #ffffff !important;
-  box-shadow: 0 4px 14px rgba(168, 85, 247, 0.4);
+  transform: translateY(-1px);
+}
+.btn-sleep-primary:active {
+  transform: translateY(0);
 }
 
-.sleepers-match-card-item {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.2s ease;
+.btn-sleep-secondary {
+  background: rgba(255, 255, 255, 0.08) !important;
+  color: #ffffff !important;
+  border: 1px solid var(--border-strong) !important;
+  font-weight: 600;
+  padding: 0.65rem 1.25rem;
+  border-radius: var(--radius-full);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  transition: background 0.15s ease;
+}
+.btn-sleep-secondary:hover {
+  background: rgba(255, 255, 255, 0.14) !important;
+  color: #ffffff !important;
 }
 
-.sleepers-match-card-item:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(168, 85, 247, 0.35);
+/* Formulaires & Inputs Flat */
+.form-control, .form-select {
+  background-color: var(--bg-input) !important;
+  border: 1px solid var(--border-strong) !important;
+  color: #ffffff !important;
+  border-radius: var(--radius-sm) !important;
+  padding: 0.55rem 0.85rem !important;
+  font-size: 0.9rem !important;
+}
+.form-control:focus, .form-select:focus {
+  background-color: #161a24 !important;
+  border-color: var(--color-primary) !important;
+  box-shadow: 0 0 0 2px rgba(254, 60, 114, 0.25) !important;
+}
+.form-control::placeholder {
+  color: var(--text-muted) !important;
 }
 
-.sleepers-liked-card-item {
-  background: rgba(255, 255, 255, 0.04);
-  border: 1px solid rgba(255, 255, 255, 0.08);
-  transition: all 0.2s ease;
+/* Card Bootstrap flat */
+.card {
+  background-color: var(--bg-surface) !important;
+  border: 1px solid var(--border-subtle) !important;
+  border-radius: var(--radius-md) !important;
+  color: #ffffff !important;
 }
 
-.sleepers-liked-card-item:hover {
-  background: rgba(255, 255, 255, 0.07);
-  border-color: rgba(236, 72, 153, 0.35);
+/* Mode Démo (si activé dans le panel admin) */
+.sleepers-test-bar {
+  background: var(--bg-surface);
+  border: 1px solid var(--border-subtle);
+  border-radius: var(--radius-full);
+  padding: 0.4rem 0.85rem;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+.sleepers-test-bar select {
+  background: var(--bg-input);
+  border: 1px solid var(--border-subtle);
+  color: #ffffff;
+  border-radius: var(--radius-full);
+  padding: 0.2rem 0.6rem;
+  font-size: 0.82rem;
 }
 
-.sleepers-comment-bubble {
-  background: rgba(11, 15, 25, 0.75);
-  border: 1px solid rgba(255, 255, 255, 0.12);
-  border-radius: 12px;
-  padding: 8px 12px;
-  font-size: 0.84rem;
-  color: #e2e8f0;
-}
+/* ==========================================================================
+   Responsive Mobile & Tablette (< 992px)
+   ========================================================================== */
 
+@media (max-width: 991px) {
+  .sleepers-app-container {
+    flex-direction: column;
+  }
+
+  .sleepers-mobile-topbar {
+    display: flex;
+  }
+
+  .sleepers-sidebar {
+    position: fixed;
+    top: 56px;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    max-width: 100%;
+    transform: translateX(-100%);
+    border-right: none;
+  }
+  .sleepers-sidebar.mobile-open {
+    transform: translateX(0);
+  }
+
+  .sleepers-sidebar-header {
+    display: none; /* Remplacé par la topbar mobile */
+  }
+
+  .sleepers-main-area {
+    padding: 1rem;
+    height: calc(100dvh - 56px);
+  }
+
+  .tinder-app-container {
+    height: 100%;
+    max-height: calc(100dvh - 90px);
+  }
+}

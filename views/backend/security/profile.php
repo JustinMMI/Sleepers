@@ -48,18 +48,26 @@ if (!empty($user['photo']) && (str_starts_with($user['photo'], 'http') || preg_m
 }
 ?>
 
-<main class="container py-5">
+<header class="d-flex justify-content-between align-items-center py-3 px-4 border-bottom border-secondary border-opacity-10" style="background: var(--bg-sidebar);">
+    <a href="<?php echo ROOT_URL; ?>/" class="sleepers-brand-logo text-decoration-none">
+        <span>🌙💤</span>
+        <span>Sleepers</span>
+    </a>
+    <div class="d-flex align-items-center gap-2">
+        <a href="<?php echo ROOT_URL; ?>/" class="btn btn-outline-light btn-sm">← Retour au deck</a>
+        <a href="<?php echo ROOT_URL; ?>/api/security/disconnect.php" class="btn btn-outline-danger btn-sm">Déconnexion</a>
+    </div>
+</header>
+
+<main class="container py-4">
     <div class="row justify-content-center">
         <div class="col-12 col-lg-10">
 
             <!-- En-tête -->
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4">
                 <div>
-                    <h1 class="fw-bold text-white mb-1">🛏️ Mon Profil Sieste</h1>
-                    <p class="text-white-50 mb-0">Personnalisez votre photo et vos habitudes de sommeil pour les autres membres</p>
-                </div>
-                <div>
-                    <a href="<?php echo ROOT_URL; ?>/" class="btn btn-outline-light btn-sm">← Retour aux profils</a>
+                    <h2 class="fw-bold text-white mb-1">🛏️ Mon Profil Sieste</h2>
+                    <p class="text-secondary mb-0">Personnalisez votre photo et vos habitudes de sommeil pour les autres membres</p>
                 </div>
             </div>
 
@@ -76,20 +84,20 @@ if (!empty($user['photo']) && (str_starts_with($user['photo'], 'http') || preg_m
             <div class="row g-4">
                 <!-- Colonne Formulaire -->
                 <div class="col-12 col-md-7">
-                    <div class="card p-4 shadow-lg" style="background: var(--sleep-bg-card); border: 1px solid var(--sleep-border-purple);">
-                        <h4 class="fw-bold text-white mb-3">✨ Personnaliser mes informations</h4>
+                    <div class="card p-4 shadow-sm" style="background: var(--bg-surface); border: 1px solid var(--border-subtle);">
+                        <h4 class="fw-bold text-white mb-3">Personnaliser mes informations</h4>
 
                         <form action="<?php echo ROOT_URL; ?>/api/security/save_profile.php" method="POST" enctype="multipart/form-data">
 
                             <!-- Section Photo de profil -->
-                            <div class="mb-4 pb-3 border-bottom border-secondary">
+                            <div class="mb-4 pb-3 border-bottom border-secondary border-opacity-25">
                                 <label class="form-label fw-bold text-white">📸 Photo de profil</label>
                                 
                                 <div class="d-flex align-items-center gap-3 mb-3">
-                                    <img src="<?php echo $currentPhoto; ?>" alt="Votre photo" class="rounded-circle object-fit-cover border border-2 border-purple-400" style="width: 72px; height: 72px;" />
+                                    <img src="<?php echo $currentPhoto; ?>" alt="Votre photo" class="rounded-circle object-fit-cover border border-2 border-secondary" style="width: 72px; height: 72px;" />
                                     <div>
                                         <div class="small fw-semibold text-white">Photo actuelle</div>
-                                        <div class="small text-white-50">Vous pouvez importer une nouvelle photo ou choisir un avatar ci-dessous.</div>
+                                        <div class="small text-secondary">Vous pouvez importer une nouvelle photo ou choisir un avatar ci-dessous.</div>
                                     </div>
                                 </div>
 

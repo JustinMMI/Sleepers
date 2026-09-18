@@ -6,7 +6,7 @@
  */
 
 if (!defined('SLEEP_DATA_DIR')) {
-    define('SLEEP_DATA_DIR', dirname(__DIR__) . '/data');
+    define('SLEEP_DATA_DIR', dirname(__DIR__) . '/BDD');
 }
 
 /**

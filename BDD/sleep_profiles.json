@@ -204,14 +204,12 @@
         "nap_duration": "45 min",
         "dreamer": true,
         "sleep_habits": [
-            "🛌 Mémoire de forme",
-            "⏱️ 45 min (idéal)",
-            "☕ Tisane verveine",
-            "💤 Grand rêveur lucide"
+            "⏱️ 45 min",
+            "💤 Grand rêveur"
         ],
-        "sleep_sound": "🌧️ Pluie battante sur velux",
-        "pillow_count": "4 oreillers géants en duvet d'oie",
-        "wake_up_style": "Café noisette et viennoiseries fraîches",
+        "sleep_sound": "🌧️ Bruit de pluie",
+        "pillow_count": "1 oreiller plat",
+        "wake_up_style": "☕ Café chaud au lit",
         "ideal_partner": "Un partenaire qui apprécie le silence réparateur et le grand confort."
     }
 }
