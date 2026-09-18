@@ -4,10 +4,6 @@
 ### dotenv ###
 .env
 
-#APP SETTINGS
-APP_DEBUG=true
-ADMIN_PASSWORD_HASH=$2y$10$fN145GvjPdq9QJok4B1Lr.9qst5kx0wmt8xweQjZ5rkhWdFiNLRtq
-
 ### macOS ###
 # General
 .DS_Store
@@ -16,7 +12,6 @@ ADMIN_PASSWORD_HASH=$2y$10$fN145GvjPdq9QJok4B1Lr.9qst5kx0wmt8xweQjZ5rkhWdFiNLRtq
 
 # Icon must end with two \r
 Icon
-
 
 # Thumbnails
 ._*
