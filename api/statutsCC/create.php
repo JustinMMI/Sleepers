@@ -1,10 +1,9 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
-require_once '../../functions/ctrlSaisies.php';
 
-$libStat = ($_POST['libStat']);
+require_once dirname(__DIR__) . '/bootstrap.php';
 
-sql_insert('STATUT', 'libStat', "'$libStat'");
+$libStat = api_input('libStat');
 
+api_execute('INSERT INTO STATUT (libStat) VALUES (:libStat)', array(':libStat' => $libStat));
 
-header('Location: ../../views/backend/statuts/list.php');
+api_redirect('/views/backend/statutsCC/list.php');

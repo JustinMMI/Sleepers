@@ -1,7 +1,6 @@
 <?php
-// A la création du login, le pseudo ne doit pas exister. 
-// Vérifier son absence en BDD avant l'insert
-function get_ExistPseudo($pseudoMemb){
+// The current USER model has no pseudo field; email is the login identifier.
+function get_ExistPseudo($emailUser){
 	global $DB;
 
     //connect to database
@@ -9,9 +8,9 @@ function get_ExistPseudo($pseudoMemb){
         sql_connect();
     }
 
-	$query = 'SELECT * FROM MEMBRE WHERE pseudoMemb = ?;';
+	$query = 'SELECT idUser FROM `USER` WHERE emailUser = ? LIMIT 1;';
 	$result = $DB->prepare($query);
-	$result->execute(array($pseudoMemb));
-	return($result->rowCount());
+	$result->execute(array($emailUser));
+	return $result->fetchColumn() !== false;
 }
 ?>

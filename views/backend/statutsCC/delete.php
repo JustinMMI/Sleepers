@@ -15,7 +15,7 @@ if(isset($_GET['numStat'])){
         </div>
         <div class="col-md-12">
             <!-- Form to create a new statut -->
-            <form action="<?php echo ROOT_URL . '/api/statuts/delete.php' ?>" method="post">
+            <form action="<?php echo ROOT_URL . '/api/statutsCC/delete.php' ?>" method="post">
                 <div class="form-group">
                     <label for="libStat">Nom du statut</label>
                     <input id="numStat" name="numStat" class="form-control" style="display: none" type="text" value="<?php echo($numStat); ?>" readonly="readonly" />

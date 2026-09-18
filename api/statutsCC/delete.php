@@ -1,10 +1,9 @@
 <?php
-require_once $_SERVER['DOCUMENT_ROOT'] . '/config.php';
-require_once '../../functions/ctrlSaisies.php';
 
-$numStat = ($_POST['numStat']);
+require_once dirname(__DIR__) . '/bootstrap.php';
 
-sql_delete('STATUT', "numStat = $numStat");
+$numStat = api_int_input('numStat');
 
+api_execute('DELETE FROM STATUT WHERE numStat = :numStat', array(':numStat' => $numStat));
 
-header('Location: ../../views/backend/statuts/list.php');
+api_redirect('/views/backend/statutsCC/list.php');
