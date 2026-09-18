@@ -1,197 +1,346 @@
 /* ==========================================================================
    SLEEPERS - Design System & Charte Graphique (Tinder de la Sieste)
+   Thème : Nuit Cosy & Douceur Nocturne (Haute Lisibilité & Contrastes WCAG)
    ========================================================================== */
 
 :root {
-  --sleep-bg-dark: #0b0e1b;
-  --sleep-bg-card: #13172c;
-  --sleep-bg-surface: rgba(255, 255, 255, 0.05);
-  --sleep-border: rgba(255, 255, 255, 0.12);
-  --sleep-border-active: rgba(192, 132, 252, 0.4);
+  /* Palette de fond & surfaces sombres */
+  --sleep-bg-base: #0b0f19;
+  --sleep-bg-card: #151b2e;
+  --sleep-bg-card-hover: #1c233a;
+  --sleep-bg-surface: #1e2538;
+  --sleep-bg-input: #121727;
+  
+  /* Bordures nettes et contrastées */
+  --sleep-border: rgba(255, 255, 255, 0.14);
+  --sleep-border-strong: rgba(255, 255, 255, 0.25);
+  --sleep-border-purple: rgba(168, 85, 247, 0.5);
+  
+  /* Couleurs d'action vives */
   --sleep-primary: #8b5cf6;
-  --sleep-secondary: #ec4899;
-  --sleep-accent: #f59e0b;
-  --sleep-success: #10b981;
-  --sleep-danger: #ef4444;
-  --sleep-text: #f8fafc;
-  --sleep-text-muted: #94a3b8;
-  --sleep-gradient-brand: linear-gradient(135deg, #6366f1 0%, #a855f7 50%, #ec4899 100%);
-  --sleep-gradient-night: linear-gradient(180deg, #0b0e1b 0%, #17153a 50%, #0b0e1b 100%);
+  --sleep-primary-hover: #7c3aed;
+  --sleep-pink: #ec4899;
+  --sleep-pink-hover: #db2777;
+  --sleep-amber: #f59e0b;
+  --sleep-emerald: #10b981;
+  --sleep-red: #ef4444;
+  --sleep-sky: #0ea5e9;
+
+  /* Typographie claire et contrastée (jamais de blanc sur blanc ni de gris illisible) */
+  --sleep-text-white: #ffffff;
+  --sleep-text-main: #f1f5f9;
+  --sleep-text-muted: #cbd5e1;
+  --sleep-text-dim: #94a3b8;
+
+  /* Dégradés identitaires */
+  --sleep-gradient-brand: linear-gradient(135deg, #7c3aed 0%, #a855f7 45%, #ec4899 100%);
+  --sleep-gradient-hover: linear-gradient(135deg, #6d28d9 0%, #9333ea 45%, #db2777 100%);
+  --sleep-gradient-text: linear-gradient(135deg, #c084fc 0%, #f472b6 60%, #fde047 100%);
 }
 
-/* Global Atmosphere */
-body {
-  background: var(--sleep-bg-dark);
-  background-image: 
-    radial-gradient(circle at 15% 20%, rgba(99, 102, 241, 0.15) 0%, transparent 40%),
-    radial-gradient(circle at 85% 60%, rgba(236, 72, 153, 0.12) 0%, transparent 45%),
-    radial-gradient(circle at 50% 90%, rgba(139, 92, 246, 0.15) 0%, transparent 40%);
-  background-attachment: fixed;
-  color: var(--sleep-text);
-  font-family: 'Segoe UI', system-ui, -apple-system, BlinkMacSystemFont, Roboto, sans-serif;
+/* ==========================================================================
+   Global Reset & Atmosphère
+   ========================================================================== */
+
+html, body {
+  background-color: var(--sleep-bg-base) !important;
+  color: var(--sleep-text-main) !important;
+  font-family: 'Plus Jakarta Sans', system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif !important;
   min-height: 100vh;
+  margin: 0;
+  padding: 0;
+  -webkit-font-smoothing: antialiased;
 }
 
-/* Navbar Customization */
+body {
+  background-image: 
+    radial-gradient(ellipse 80% 50% at 50% -20%, rgba(124, 58, 237, 0.22), transparent),
+    radial-gradient(ellipse 60% 40% at 90% 50%, rgba(236, 72, 153, 0.12), transparent),
+    radial-gradient(ellipse 60% 40% at 10% 75%, rgba(59, 130, 246, 0.1), transparent);
+  background-attachment: fixed;
+}
+
+/* ==========================================================================
+   Surcharges Bootstrap pour Thème Sombre & Haute Lisibilité
+   (Empêche strictement le blanc sur blanc ou le texte invisible)
+   ========================================================================== */
+
+.text-white {
+  color: #ffffff !important;
+}
+
+.text-white-50 {
+  color: #cbd5e1 !important; /* Rendu solide à fort contraste au lieu de transparence fade */
+}
+
+.text-muted {
+  color: #94a3b8 !important;
+}
+
+/* Formulaires & Champs de saisie */
+.form-control, 
+.form-select {
+  background-color: var(--sleep-bg-input) !important;
+  border: 1px solid var(--sleep-border-strong) !important;
+  color: #ffffff !important;
+  border-radius: 12px !important;
+  padding: 0.6rem 0.9rem !important;
+}
+
+.form-control:focus, 
+.form-select:focus {
+  background-color: #161b2e !important;
+  border-color: #a855f7 !important;
+  color: #ffffff !important;
+  box-shadow: 0 0 0 0.25rem rgba(168, 85, 247, 0.25) !important;
+}
+
+.form-control::placeholder {
+  color: #64748b !important;
+  opacity: 1;
+}
+
+.form-select option {
+  background-color: #0b0f19 !important;
+  color: #ffffff !important;
+}
+
+.form-label {
+  color: #e2e8f0 !important;
+  font-weight: 600 !important;
+  margin-bottom: 0.4rem;
+}
+
+/* Cartes et panneaux Bootstrap */
+.card {
+  background-color: var(--sleep-bg-card) !important;
+  border: 1px solid var(--sleep-border) !important;
+  border-radius: 18px !important;
+  color: var(--sleep-text-main) !important;
+}
+
+/* Alertes stylisées sombres et lisibles */
+.alert {
+  background-color: var(--sleep-bg-card) !important;
+  border: 1px solid var(--sleep-border-strong) !important;
+  color: #ffffff !important;
+  border-radius: 14px !important;
+}
+
+.alert-warning {
+  background-color: rgba(245, 158, 11, 0.18) !important;
+  border-color: rgba(245, 158, 11, 0.45) !important;
+  color: #fde68a !important;
+}
+
+.alert-danger {
+  background-color: rgba(239, 68, 68, 0.18) !important;
+  border-color: rgba(239, 68, 68, 0.45) !important;
+  color: #fecaca !important;
+}
+
+.alert-success {
+  background-color: rgba(16, 185, 129, 0.18) !important;
+  border-color: rgba(16, 185, 129, 0.45) !important;
+  color: #a7f3d0 !important;
+}
+
+/* Boutons d'action */
+.btn-primary {
+  background: var(--sleep-gradient-brand) !important;
+  border: 1px solid rgba(255, 255, 255, 0.2) !important;
+  color: #ffffff !important;
+  font-weight: 700 !important;
+  box-shadow: 0 4px 15px rgba(168, 85, 247, 0.4) !important;
+}
+
+.btn-primary:hover {
+  background: var(--sleep-gradient-hover) !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  transform: translateY(-1px);
+}
+
+.btn-outline-light {
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.3) !important;
+  background: rgba(255, 255, 255, 0.05) !important;
+}
+
+.btn-outline-light:hover {
+  background: rgba(255, 255, 255, 0.15) !important;
+  border-color: #ffffff !important;
+  color: #ffffff !important;
+}
+
+.btn-link {
+  color: #c084fc !important;
+  text-decoration: none;
+}
+
+.btn-link:hover {
+  color: #f472b6 !important;
+  text-decoration: underline;
+}
+
+/* ==========================================================================
+   Navigation Bar
+   ========================================================================== */
+
 .sleepers-navbar {
-  background: rgba(19, 23, 44, 0.8) !important;
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
+  background: rgba(11, 15, 25, 0.88) !important;
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border-bottom: 1px solid var(--sleep-border);
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.4);
 }
 
 .sleepers-brand {
   font-weight: 800;
-  font-size: 1.4rem;
-  background: linear-gradient(135deg, #c084fc, #f472b6, #fbbf24);
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
+  font-size: 1.35rem;
+  letter-spacing: -0.01em;
+  color: #ffffff !important;
   display: flex;
   align-items: center;
   gap: 0.5rem;
   text-decoration: none;
 }
 
-.sleepers-brand-badge {
-  font-size: 0.65rem;
-  text-transform: uppercase;
-  letter-spacing: 0.1em;
-  color: #c084fc;
-  border: 1px solid rgba(192, 132, 252, 0.3);
-  background: rgba(192, 132, 252, 0.1);
-  padding: 2px 6px;
-  border-radius: 999px;
-  font-weight: 600;
-}
-
-/* Landing Page (Visiteur non connecté) */
-.sleepers-hero-section {
-  padding: 3.5rem 1rem 2rem;
-  text-align: center;
-}
-
-.sleepers-pill-tag {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  background: rgba(168, 85, 247, 0.15);
-  border: 1px solid rgba(168, 85, 247, 0.35);
-  color: #e9d5ff;
-  font-size: 0.85rem;
-  font-weight: 600;
-  padding: 0.35rem 1rem;
-  border-radius: 999px;
-  margin-bottom: 1.5rem;
-}
-
-.sleepers-hero-title {
-  font-size: clamp(2.2rem, 5vw, 3.8rem);
-  font-weight: 900;
-  line-height: 1.15;
-  margin-bottom: 1.25rem;
-  letter-spacing: -0.02em;
-}
-
-.sleepers-gradient-text {
-  background: linear-gradient(135deg, #a78bfa 0%, #f472b6 60%, #fbbf24 100%);
+.sleepers-brand-text {
+  background: var(--sleep-gradient-text);
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
+  font-weight: 800;
 }
 
-.sleepers-hero-subtitle {
-  font-size: 1.15rem;
-  color: var(--sleep-text-muted);
-  max-width: 580px;
-  margin: 0 auto 2rem;
-  line-height: 1.6;
+.sleepers-brand-badge {
+  font-size: 0.7rem;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: #e9d5ff;
+  border: 1px solid rgba(192, 132, 252, 0.4);
+  background: rgba(168, 85, 247, 0.2);
+  padding: 3px 8px;
+  border-radius: 999px;
+  font-weight: 700;
 }
 
-.sleepers-cta-group {
-  display: flex;
-  justify-content: center;
-  gap: 1rem;
-  flex-wrap: wrap;
-  margin-bottom: 3.5rem;
+.sleepers-navbar .nav-link {
+  color: #cbd5e1 !important;
+  font-weight: 600;
+  font-size: 0.95rem;
+  padding: 0.5rem 0.8rem !important;
+  transition: color 0.2s ease;
 }
+
+.sleepers-navbar .nav-link:hover,
+.sleepers-navbar .nav-link.active {
+  color: #ffffff !important;
+}
+
+/* ==========================================================================
+   Boutons Spéciaux Sleepers
+   ========================================================================== */
 
 .btn-sleep-primary {
   background: var(--sleep-gradient-brand);
-  color: #ffffff;
+  color: #ffffff !important;
   font-weight: 700;
-  padding: 0.85rem 2rem;
-  border-radius: 14px;
-  border: none;
-  box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.5);
+  padding: 0.65rem 1.4rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 8px 20px -4px rgba(168, 85, 247, 0.5);
   transition: all 0.25s ease;
   text-decoration: none;
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   gap: 0.5rem;
 }
 
 .btn-sleep-primary:hover {
-  color: #ffffff;
+  background: var(--sleep-gradient-hover);
+  color: #ffffff !important;
   transform: translateY(-2px);
-  box-shadow: 0 15px 30px -5px rgba(236, 72, 153, 0.6);
+  box-shadow: 0 12px 25px -4px rgba(236, 72, 153, 0.6);
 }
 
 .btn-sleep-secondary {
-  background: rgba(255, 255, 255, 0.08);
-  color: #f1f5f9;
+  background: #1e2538;
+  color: #ffffff !important;
   font-weight: 600;
-  padding: 0.85rem 1.8rem;
-  border-radius: 14px;
-  border: 1px solid var(--sleep-border);
-  backdrop-filter: blur(10px);
+  padding: 0.65rem 1.3rem;
+  border-radius: 12px;
+  border: 1px solid rgba(255, 255, 255, 0.2);
   transition: all 0.25s ease;
   text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .btn-sleep-secondary:hover {
-  background: rgba(255, 255, 255, 0.15);
-  color: #ffffff;
-  border-color: rgba(255, 255, 255, 0.25);
+  background: #28324a;
+  color: #ffffff !important;
+  border-color: rgba(255, 255, 255, 0.35);
   transform: translateY(-2px);
 }
 
-/* Feature Cards (Piliers de la sieste) */
-.sleepers-feature-card {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid var(--sleep-border);
-  border-radius: 20px;
-  padding: 1.75rem;
-  height: 100%;
-  backdrop-filter: blur(10px);
-  transition: transform 0.25s ease, border-color 0.25s ease;
+/* ==========================================================================
+   Bannière Découverte & Encart Visiteur
+   ========================================================================== */
+
+.sleepers-discovery-card {
+  background: var(--sleep-bg-card);
+  border: 1px solid var(--sleep-border-purple);
+  box-shadow: 0 12px 35px rgba(0, 0, 0, 0.4);
+  border-radius: 22px;
+  padding: 1.5rem;
 }
 
-.sleepers-feature-card:hover {
-  transform: translateY(-5px);
-  border-color: var(--sleep-border-active);
-  background: rgba(255, 255, 255, 0.05);
+.sleepers-discovery-card h5 {
+  color: #ffffff;
+  font-weight: 700;
 }
 
-.sleepers-feature-icon {
-  width: 50px;
-  height: 50px;
-  border-radius: 14px;
-  background: rgba(168, 85, 247, 0.15);
-  border: 1px solid rgba(168, 85, 247, 0.3);
-  display: flex;
+.sleepers-discovery-card p {
+  color: #cbd5e1;
+  line-height: 1.5;
+}
+
+/* Switcher de Test Rapide BDD (Haute lisibilité, zéro blanc sur blanc) */
+.sleepers-test-bar {
+  background: var(--sleep-bg-card);
+  border: 1px solid var(--sleep-border-strong);
+  border-radius: 999px;
+  padding: 5px 14px;
+  display: inline-flex;
   align-items: center;
-  justify-content: center;
-  font-size: 1.5rem;
-  margin-bottom: 1.25rem;
+  gap: 8px;
+  box-shadow: 0 4px 14px rgba(0, 0, 0, 0.3);
+}
+
+.sleepers-test-bar select {
+  background-color: #0b0f19 !important;
+  color: #ffffff !important;
+  border: 1px solid rgba(255, 255, 255, 0.25) !important;
+  border-radius: 8px !important;
+  padding: 3px 10px !important;
+  font-size: 0.82rem !important;
+  height: 32px !important;
+}
+
+.sleepers-test-bar select option {
+  background-color: #0b0f19 !important;
+  color: #ffffff !important;
 }
 
 /* ==========================================================================
-   Tinder Card Deck (Utilisateur connecté)
+   Deck de Cartes Tinder Sleepers (Présentation des Siesteurs)
    ========================================================================== */
 
 .tinder-app-container {
   max-width: 440px;
-  margin: 1.5rem auto 3rem;
+  margin: 0.75rem auto 2.5rem;
   position: relative;
   display: flex;
   flex-direction: column;
@@ -201,17 +350,17 @@ body {
 .tinder-deck-wrapper {
   position: relative;
   width: 100%;
-  height: 500px;
+  height: 520px;
 }
 
 .tinder-profile-card {
   position: absolute;
   inset: 0;
-  border-radius: 26px;
+  border-radius: 28px;
   overflow: hidden;
   background: var(--sleep-bg-card);
-  border: 1px solid var(--sleep-border);
-  box-shadow: 0 20px 40px -10px rgba(0, 0, 0, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.16);
+  box-shadow: 0 24px 50px -10px rgba(0, 0, 0, 0.75);
   user-select: none;
   touch-action: none;
   cursor: grab;
@@ -232,59 +381,57 @@ body {
   pointer-events: none;
 }
 
+/* Dégradé sombre protecteur pour une lisibilité parfaite des textes */
 .tinder-card-overlay {
   position: absolute;
   inset: 0;
-  background: linear-gradient(180deg, rgba(0, 0, 0, 0.1) 0%, rgba(11, 14, 27, 0.3) 50%, rgba(11, 14, 27, 0.95) 100%);
+  background: linear-gradient(180deg, 
+    rgba(11, 15, 25, 0.1) 0%, 
+    rgba(11, 15, 25, 0.1) 40%, 
+    rgba(11, 15, 25, 0.8) 72%, 
+    rgba(11, 15, 25, 0.98) 100%);
   pointer-events: none;
 }
 
-/* Swipe Stamps (LIKE & NOPE) */
+/* Tampons d'animation LIKE & NOPE */
 .tinder-stamp {
   position: absolute;
   top: 40px;
-  padding: 6px 16px;
+  padding: 8px 18px;
   font-size: 1.6rem;
   font-weight: 900;
   letter-spacing: 0.1em;
   text-transform: uppercase;
-  border-radius: 12px;
+  border-radius: 14px;
   opacity: 0;
   pointer-events: none;
   transition: opacity 0.15s ease;
   z-index: 10;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.5);
 }
 
 .tinder-stamp-like {
-  left: 30px;
-  border: 3px solid #10b981;
-  color: #10b981;
+  left: 24px;
+  background: rgba(16, 185, 129, 0.9);
+  border: 3px solid #ffffff;
+  color: #ffffff;
   transform: rotate(-15deg);
 }
 
 .tinder-stamp-nope {
-  right: 30px;
-  border: 3px solid #ef4444;
-  color: #ef4444;
+  right: 24px;
+  background: rgba(239, 68, 68, 0.9);
+  border: 3px solid #ffffff;
+  color: #ffffff;
   transform: rotate(15deg);
 }
 
-/* Card Content Details */
-.tinder-card-content {
-  position: absolute;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  padding: 1.5rem;
-  z-index: 5;
-  pointer-events: none;
-}
-
+/* Badges du haut de carte */
 .tinder-badge-top {
   position: absolute;
-  top: 1rem;
-  left: 1rem;
-  right: 1rem;
+  top: 1.25rem;
+  left: 1.25rem;
+  right: 1.25rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -292,43 +439,79 @@ body {
 }
 
 .tinder-tag {
-  background: rgba(255, 255, 255, 0.1);
-  backdrop-filter: blur(8px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  color: #e2e8f0;
-  font-size: 0.75rem;
-  padding: 3px 10px;
+  background: rgba(11, 15, 25, 0.85);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+  font-size: 0.8rem;
+  font-weight: 700;
+  padding: 4px 12px;
   border-radius: 999px;
-  font-weight: 600;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
 }
 
 .tinder-tag-genre {
-  background: rgba(168, 85, 247, 0.25);
-  border-color: rgba(168, 85, 247, 0.4);
-  color: #d8b4fe;
+  background: rgba(124, 58, 237, 0.88);
+  border-color: rgba(168, 85, 247, 0.6);
+  color: #ffffff;
+}
+
+/* Contenu textuel de la carte */
+.tinder-card-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 1.5rem 1.4rem 1.3rem;
+  z-index: 5;
+  pointer-events: none;
+}
+
+.tinder-pill-bed {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  background: rgba(88, 28, 135, 0.8);
+  border: 1px solid #a855f7;
+  color: #f3e8ff;
+  font-size: 0.82rem;
+  font-weight: 600;
+  padding: 4px 12px;
+  border-radius: 999px;
+  margin-bottom: 0.5rem;
+  max-width: 100%;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(8px);
 }
 
 .tinder-profile-name {
-  font-size: 1.75rem;
+  font-size: 1.85rem;
   font-weight: 800;
   color: #ffffff;
-  margin-bottom: 0.25rem;
+  margin-bottom: 0.35rem;
   display: flex;
   align-items: baseline;
   gap: 0.5rem;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
+  letter-spacing: -0.01em;
 }
 
 .tinder-profile-age {
-  font-weight: 300;
+  font-weight: 500;
   color: #cbd5e1;
-  font-size: 1.5rem;
+  font-size: 1.45rem;
+  text-shadow: 0 2px 6px rgba(0, 0, 0, 0.85);
 }
 
 .tinder-profile-bio {
-  font-size: 0.9rem;
-  color: #cbd5e1;
-  line-height: 1.4;
+  font-size: 0.95rem;
+  color: #f1f5f9;
+  line-height: 1.45;
   margin-bottom: 0.75rem;
+  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.95);
   display: -webkit-box;
   -webkit-line-clamp: 2;
   -webkit-box-orient: vertical;
@@ -338,113 +521,176 @@ body {
 .tinder-pill-habits {
   display: flex;
   flex-wrap: wrap;
-  gap: 0.4rem;
+  gap: 0.45rem;
 }
 
 .tinder-pill-habit {
-  background: rgba(0, 0, 0, 0.4);
-  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(15, 23, 42, 0.85);
+  border: 1px solid rgba(255, 255, 255, 0.22);
   color: #f1f5f9;
-  font-size: 0.75rem;
-  padding: 3px 8px;
+  font-size: 0.78rem;
+  font-weight: 600;
+  padding: 4px 10px;
   border-radius: 8px;
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.9);
 }
 
-/* Action Control Buttons (Tinder Style) */
+/* ==========================================================================
+   Barre d'Actions Tinder (Boutons Contrastés)
+   ========================================================================== */
+
 .tinder-action-bar {
   display: flex;
   align-items: center;
   justify-content: center;
-  gap: 1rem;
+  gap: 1.1rem;
   margin-top: 1.25rem;
   width: 100%;
 }
 
 .tinder-btn {
   border-radius: 999px;
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   border: none;
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid var(--sleep-border);
-  box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3);
   cursor: pointer;
   transition: all 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.2);
-  color: #ffffff;
+  user-select: none;
 }
 
 .tinder-btn:active {
-  transform: scale(0.88);
+  transform: scale(0.9) !important;
 }
 
 .tinder-btn-small {
-  width: 48px;
-  height: 48px;
-  font-size: 1.25rem;
+  width: 52px;
+  height: 52px;
+  font-size: 1.35rem;
 }
 
 .tinder-btn-large {
-  width: 66px;
-  height: 66px;
-  font-size: 1.75rem;
+  width: 70px;
+  height: 70px;
+  font-size: 2rem;
 }
 
-.tinder-btn-nope {
-  border: 2px solid rgba(239, 68, 68, 0.6);
-  background: rgba(239, 68, 68, 0.12);
-  color: #f87171;
+/* Rewind ↺ */
+.tinder-btn-rewind {
+  background: #241a0b;
+  border: 2px solid #f59e0b;
+  color: #fbbf24;
+  box-shadow: 0 6px 18px rgba(245, 158, 11, 0.3);
 }
 
-.tinder-btn-nope:hover {
-  border-color: #ef4444;
-  background: rgba(239, 68, 68, 0.22);
+.tinder-btn-rewind:hover {
+  background: #362810;
+  border-color: #fde047;
   color: #ffffff;
-  transform: scale(1.06);
-}
-
-.tinder-btn-like {
-  border: 2px solid rgba(16, 185, 129, 0.6);
-  background: rgba(16, 185, 129, 0.12);
-  color: #34d399;
-}
-
-.tinder-btn-like:hover {
-  border-color: #10b981;
-  background: rgba(16, 185, 129, 0.22);
-  color: #ffffff;
-  transform: scale(1.06);
-}
-
-.tinder-btn-super {
-  border: 1px solid rgba(56, 189, 248, 0.5);
-  background: rgba(56, 189, 248, 0.12);
-  color: #38bdf8;
-}
-
-.tinder-btn-super:hover {
-  border-color: #38bdf8;
-  background: rgba(56, 189, 248, 0.25);
   transform: scale(1.08);
 }
 
-.tinder-btn-rewind {
-  color: #fbbf24;
+/* Nope ✕ */
+.tinder-btn-nope {
+  background: #271017;
+  border: 2px solid #ef4444;
+  color: #f87171;
+  box-shadow: 0 6px 20px rgba(239, 68, 68, 0.32);
 }
 
+.tinder-btn-nope:hover {
+  background: #3a1521;
+  border-color: #fca5a5;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+/* Super Sieste ⭐ */
+.tinder-btn-super {
+  background: #0c2033;
+  border: 2px solid #0284c7;
+  color: #38bdf8;
+  box-shadow: 0 6px 18px rgba(2, 132, 199, 0.3);
+}
+
+.tinder-btn-super:hover {
+  background: #102e4a;
+  border-color: #7dd3fc;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+/* Like 💤 */
+.tinder-btn-like {
+  background: #0b261b;
+  border: 2px solid #10b981;
+  color: #34d399;
+  box-shadow: 0 6px 20px rgba(16, 185, 129, 0.32);
+}
+
+.tinder-btn-like:hover {
+  background: #0e3525;
+  border-color: #6ee7b7;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+/* Commentaire / Mot doux 💬 */
 .tinder-btn-comment {
+  background: #241237;
+  border: 2px solid #a855f7;
   color: #c084fc;
+  box-shadow: 0 6px 18px rgba(168, 85, 247, 0.3);
 }
 
-/* Match Celebration Popup */
+.tinder-btn-comment:hover {
+  background: #361b52;
+  border-color: #d8b4fe;
+  color: #ffffff;
+  transform: scale(1.08);
+}
+
+/* ==========================================================================
+   État Deck Vide
+   ========================================================================== */
+
+.tinder-empty-deck {
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  height: 100%;
+  padding: 2.5rem 1.5rem;
+  background: var(--sleep-bg-card);
+  border: 2px dashed rgba(255, 255, 255, 0.2);
+  border-radius: 28px;
+}
+
+.tinder-empty-deck.show {
+  display: flex;
+}
+
+.tinder-empty-deck h4 {
+  color: #ffffff;
+}
+
+.tinder-empty-deck p {
+  color: #cbd5e1;
+}
+
+/* ==========================================================================
+   Modales & Tiroir des Matchs
+   ========================================================================== */
+
 .sleepers-match-modal {
   display: none;
   position: fixed;
   inset: 0;
   z-index: 1050;
-  background: rgba(0, 0, 0, 0.88);
-  backdrop-filter: blur(12px);
-  -webkit-backdrop-filter: blur(12px);
+  background: rgba(0, 0, 0, 0.85);
+  backdrop-filter: blur(14px);
+  -webkit-backdrop-filter: blur(14px);
   align-items: center;
   justify-content: center;
   padding: 1.5rem;
@@ -455,16 +701,17 @@ body {
 }
 
 .sleepers-match-card {
-  max-width: 400px;
+  max-width: 420px;
   width: 100%;
-  background: #13172c;
-  border: 1px solid rgba(192, 132, 252, 0.4);
+  background: var(--sleep-bg-card);
+  border: 1px solid var(--sleep-border-purple);
   border-radius: 28px;
-  padding: 2rem;
+  padding: 2.2rem;
   text-align: center;
-  box-shadow: 0 25px 50px -12px rgba(168, 85, 247, 0.4);
+  box-shadow: 0 25px 60px -12px rgba(168, 85, 247, 0.5);
   position: relative;
   animation: matchPopIn 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  color: #ffffff;
 }
 
 @keyframes matchPopIn {
@@ -485,40 +732,22 @@ body {
   border-radius: 50%;
   object-fit: cover;
   border: 3px solid #ec4899;
-  box-shadow: 0 0 20px rgba(236, 72, 153, 0.5);
+  box-shadow: 0 0 25px rgba(236, 72, 153, 0.6);
 }
 
 .match-avatar-partner {
-  margin-left: -20px;
+  margin-left: -22px;
   border-color: #8b5cf6;
-  box-shadow: 0 0 20px rgba(139, 92, 246, 0.5);
+  box-shadow: 0 0 25px rgba(139, 92, 246, 0.6);
 }
 
-/* Empty deck state */
-.tinder-empty-deck {
-  display: none;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  height: 100%;
-  padding: 2rem;
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px dashed var(--sleep-border);
-  border-radius: 26px;
-}
-
-.tinder-empty-deck.show {
-  display: flex;
-}
-
-/* Drawer for Matches */
+/* Tiroir / Drawer des Matchs */
 .sleepers-drawer {
   display: none;
   position: fixed;
   inset: 0;
-  background: rgba(0, 0, 0, 0.8);
-  backdrop-filter: blur(8px);
+  background: rgba(0, 0, 0, 0.82);
+  backdrop-filter: blur(10px);
   z-index: 1040;
   align-items: center;
   justify-content: center;
@@ -531,13 +760,57 @@ body {
 
 .sleepers-drawer-content {
   background: var(--sleep-bg-card);
-  border: 1px solid var(--sleep-border);
+  border: 1px solid var(--sleep-border-strong);
   border-radius: 24px;
   width: 100%;
   max-width: 480px;
   max-height: 80vh;
   overflow-y: auto;
   padding: 1.5rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 45px rgba(0, 0, 0, 0.7);
+  color: #ffffff;
 }
 
+/* ==========================================================================
+   Les 3 Piliers de Sleepers (Section Fonctionnalités)
+   ========================================================================== */
+
+.sleepers-feature-card {
+  background: var(--sleep-bg-card);
+  border: 1px solid var(--sleep-border);
+  border-radius: 22px;
+  padding: 1.75rem;
+  height: 100%;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.35);
+  transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.sleepers-feature-card:hover {
+  transform: translateY(-4px);
+  border-color: var(--sleep-border-purple);
+  box-shadow: 0 12px 30px rgba(168, 85, 247, 0.25);
+}
+
+.sleepers-feature-card h4 {
+  color: #ffffff;
+  font-weight: 700;
+}
+
+.sleepers-feature-card p {
+  color: #cbd5e1;
+  font-size: 0.95rem;
+  line-height: 1.5;
+}
+
+.sleepers-feature-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 14px;
+  background: rgba(124, 58, 237, 0.25);
+  border: 1px solid rgba(168, 85, 247, 0.4);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 1.6rem;
+  margin-bottom: 1.25rem;
+}
