@@ -1,19 +1,16 @@
 {
     "1": {
-        "bed_type": "LIT BLEU",
+        "bed_type": "Lit King Size ultra douillet",
         "nap_duration": "45 min",
         "dreamer": true,
         "sleep_habits": [
-            "☕ Tisane camomille",
-            "🧸 Doudou réconfortant",
-            "🎧 Casque anti-bruit",
-            "🕯️ Bougie parfumée",
-            "⏱️ 45 min"
+            "⏱️ 45 min",
+            "💤 Grand rêveur"
         ],
         "sleep_sound": "🌧️ Bruit de pluie",
         "pillow_count": "3 oreillers",
-        "wake_up_style": "☕ Café chaud au lit",
-        "ideal_partner": "Quelqu'un de calme qui aime s'endormir avec le bruit de la pluie."
+        "wake_up_style": "Murmures et étirements",
+        "ideal_partner": "Adore les siestes au calme"
     },
     "2": {
         "bed_type": "LIT EN FORME D'EQUERRE",

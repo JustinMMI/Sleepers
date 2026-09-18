@@ -8,12 +8,15 @@ $currentUser = null;
 $dbProfiles = array();
 $allUsersList = array();
 
-// Récupérer la liste complète des utilisateurs pour le sélecteur de test rapide
-try {
-    $allUsersStmt = $DB->query('SELECT idUser, prenomUser, nomEUser, age FROM `USER` ORDER BY idUser ASC');
-    $allUsersList = $allUsersStmt->fetchAll(PDO::FETCH_ASSOC);
-} catch (Exception $e) {
-    $allUsersList = array();
+// Récupérer la liste des profils si le mode démo est activé par l'administrateur
+$isTestBddEnabled = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : false;
+if ($isTestBddEnabled) {
+    try {
+        $allUsersStmt = $DB->query('SELECT idUser, prenomUser, nomEUser, age FROM `USER` ORDER BY idUser ASC');
+        $allUsersList = $allUsersStmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (Exception $e) {
+        $allUsersList = array();
+    }
 }
 
 if ($isLoggedIn) {
@@ -22,7 +25,7 @@ if ($isLoggedIn) {
     $stmt->execute(array(':id' => ID_USER));
     $currentUser = $stmt->fetch(PDO::FETCH_ASSOC);
 
-    // Profils non encore swipés par ce membre (exclut soi-même et les profils déjà dans LIKES)
+    // Profils non encore vus par ce membre (exclut soi-même et les profils déjà dans LIKES)
     $stmtProfiles = $DB->prepare(
         'SELECT u.idUser, u.nomEUser, u.prenomUser, u.age, u.photo, u.biographie, g.libGenr
          FROM `USER` u
@@ -34,7 +37,7 @@ if ($isLoggedIn) {
     $stmtProfiles->execute(array(':myId' => ID_USER));
     $dbProfiles = $stmtProfiles->fetchAll(PDO::FETCH_ASSOC);
 } else {
-    // VISITEUR NON CONNECTE : Récupérer TOUS les profils réels de la table USER
+    // VISITEUR NON CONNECTE : Découverte des profils
     $stmtProfiles = $DB->query(
         'SELECT u.idUser, u.nomEUser, u.prenomUser, u.age, u.photo, u.biographie, g.libGenr
          FROM `USER` u
@@ -44,12 +47,21 @@ if ($isLoggedIn) {
     $dbProfiles = $stmtProfiles->fetchAll(PDO::FETCH_ASSOC);
 }
 
-// Rattacher à chaque profil ses préférences de sieste issues du fichier JSON
-$isTestBddEnabled = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : false;
+// Rattacher à chaque profil ses préférences de sieste issues du fichier de profils
 foreach ($dbProfiles as &$p) {
     $p['sleep_traits'] = get_user_sleep_traits((int)$p['idUser'], $p['photo'] ?? '', $p['biographie'] ?? '');
 }
 unset($p);
+
+// Résolution de la photo de l'utilisateur connecté
+$currentUserPhoto = '';
+if ($isLoggedIn && !empty($currentUser)) {
+    if (!empty($currentUser['photo']) && (str_starts_with($currentUser['photo'], 'http') || preg_match('/\.(jpg|jpeg|png|webp)$/i', $currentUser['photo']))) {
+        $currentUserPhoto = str_starts_with($currentUser['photo'], 'http') ? $currentUser['photo'] : ROOT_URL . '/' . ltrim($currentUser['photo'], '/');
+    } else {
+        $currentUserPhoto = 'https://i.pravatar.cc/150?u=sleepers_' . (int)ID_USER;
+    }
+}
 ?>
 
 <main class="container py-3">
@@ -58,30 +70,20 @@ unset($p);
     <!-- =========================================================================
          BARRE MEMBRE CONNECTE
          ========================================================================= -->
-    <div class="d-flex justify-content-between align-items-center max-w-md mx-auto mb-3" style="max-width: 520px;">
+    <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-4 p-3 rounded-4" style="background: var(--sleep-bg-card); border: 1px solid var(--sleep-border);">
       <div class="d-flex align-items-center gap-3">
-        <div class="rounded-circle overflow-hidden d-flex align-items-center justify-content-center border border-2 border-purple-400" style="width: 46px; height: 46px; background: #1f1b3c;">
-          <?php 
-            if (!empty($currentUser['photo']) && (str_starts_with($currentUser['photo'], 'http') || preg_match('/\.(jpg|jpeg|png|webp)$/i', $currentUser['photo']))) {
-              echo '<img src="' . htmlspecialchars($currentUser['photo'], ENT_QUOTES) . '" class="w-100 h-100 object-fit-cover" />';
-            } else {
-              echo '<img src="https://i.pravatar.cc/150?u=sleepers_' . (int)$currentUser['idUser'] . '" class="w-100 h-100 object-fit-cover" />';
-            }
-          ?>
+        <div class="rounded-circle overflow-hidden d-flex align-items-center justify-content-center border border-2 border-purple-400" style="width: 48px; height: 48px; background: #1f1b3c;">
+          <img src="<?php echo $currentUserPhoto; ?>" class="w-100 h-100 object-fit-cover" alt="Photo" />
         </div>
         <div>
-          <div class="small" style="color: #94a3b8; font-size: 0.8rem;">Connecté en tant que</div>
-          <div class="fw-bold text-white fs-6"><?php echo htmlspecialchars(($currentUser['prenomUser'] ?? 'Siesteur') . ' ' . ($currentUser['nomEUser'] ?? ''), ENT_QUOTES); ?> <span class="badge" style="background: rgba(168, 85, 247, 0.35); border: 1px solid #a855f7; color: #f3e8ff; font-size: 0.72rem;">#<?php echo (int)$currentUser['idUser']; ?></span></div>
+          <div class="small" style="color: #94a3b8; font-size: 0.8rem;">Bonjour,</div>
+          <div class="fw-bold text-white fs-6"><?php echo htmlspecialchars(($currentUser['prenomUser'] ?? 'Siesteur') . ' ' . ($currentUser['nomEUser'] ?? ''), ENT_QUOTES); ?></div>
         </div>
       </div>
       <div class="d-flex align-items-center gap-2">
-        <a href="<?php echo ROOT_URL; ?>/views/backend/security/profile.php" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1" title="Personnaliser mes habitudes de sieste">
-          <span>🛏️ Mon profil</span>
+        <a href="<?php echo ROOT_URL; ?>/views/backend/security/profile.php" class="btn btn-sm btn-outline-light rounded-pill px-3 py-1">
+          <span>🛏️ Modifier mon profil &amp; photo</span>
         </a>
-        <button onclick="toggleMatchDrawer()" class="btn btn-sm btn-sleep-secondary rounded-pill px-3 py-1 d-flex align-items-center gap-2">
-          <span>💤 Matchs</span>
-          <span id="badgeMatchCount" class="badge bg-danger rounded-pill" style="font-size: 0.75rem;">0</span>
-        </button>
       </div>
     </div>
 
@@ -89,14 +91,14 @@ unset($p);
     <!-- =========================================================================
          BANNIERE DÉCOUVERTE POUR VISITEUR NON CONNECTE
          ========================================================================= -->
-    <div class="max-w-md mx-auto mb-4" style="max-width: 480px;">
+    <div class="max-w-md mx-auto mb-4" style="max-width: 520px;">
       <div class="sleepers-discovery-card">
         <div class="d-flex align-items-center gap-2 mb-2">
           <span class="fs-4">🌙💤</span>
           <h5 class="fw-bold text-white mb-0">Bienvenue sur Sleepers</h5>
         </div>
         <p class="mb-3" style="color: #cbd5e1; font-size: 0.95rem;">
-          Le premier site de rencontre pour ne plus jamais faire la sieste seul(e). Découvrez les profils réels ci-dessous !
+          Le premier site de rencontre pour ne plus jamais faire la sieste seul(e). Découvrez les siesteurs ci-dessous !
           <strong class="text-white d-block mt-1">Connectez-vous pour liker, matcher et convenir d'une sieste à deux.</strong>
         </p>
         <div class="d-flex gap-2">
@@ -112,22 +114,20 @@ unset($p);
   <?php } ?>
 
   <?php if ($isTestBddEnabled) { ?>
-    <!-- =========================================================================
-         SWITCHER DE TEST RAPIDE (Désactivé par défaut, activable dans le panel admin)
-         ========================================================================= -->
+    <!-- Mode Démo / Switcher rapide (Uniquement affiché si activé dans l'admin) -->
     <div class="d-flex justify-content-center mb-3">
       <div class="sleepers-test-bar">
-        <span class="fw-semibold text-white small">🧪 Test BDD :</span>
+        <span class="fw-semibold text-white small">🧪 Mode Démo :</span>
         <form action="<?php echo ROOT_URL; ?>/api/security/quick_switch.php" method="POST" class="d-inline-flex align-items-center gap-2 m-0">
-          <select name="userId" aria-label="Choisir un profil de test">
+          <select name="userId" aria-label="Choisir un profil de démo">
             <?php foreach ($allUsersList as $u): ?>
               <option value="<?php echo (int)$u['idUser']; ?>" <?php echo ($isLoggedIn && ID_USER == $u['idUser']) ? 'selected' : ''; ?>>
-                #<?php echo (int)$u['idUser']; ?> - <?php echo htmlspecialchars($u['prenomUser'] . ' ' . $u['nomEUser']); ?>
+                <?php echo htmlspecialchars($u['prenomUser'] . ' ' . $u['nomEUser']); ?>
               </option>
             <?php endforeach; ?>
           </select>
           <button type="submit" class="btn btn-sm btn-sleep-primary py-1 px-3" style="font-size: 0.8rem;">
-            <?php echo $isLoggedIn ? 'Changer' : 'Tester ce profil'; ?>
+            Tester ce profil
           </button>
         </form>
       </div>
@@ -135,79 +135,151 @@ unset($p);
   <?php } ?>
 
   <!-- =========================================================================
-       LE DECK DE CARTES TINDER (Présente tous les profils réels de la table USER)
+       DISPOSITION PRINCIPALE DU SITE
        ========================================================================= -->
-  <div class="tinder-app-container my-0">
-    
-    <!-- État vide (quand tous les profils de la BDD ont été vus) -->
-    <div id="deckEmptyState" class="tinder-empty-deck w-100">
-      <div style="font-size: 3.5rem;" class="mb-3">😴💤</div>
-      <h4 class="fw-bold text-white mb-2">Tous les siesteurs de la BDD ont été vus !</h4>
-      <p class="text-white-50 small mb-3">
-        Il n'y a plus d'autre profil à afficher dans la table <code>USER</code>.
-      </p>
-      <div class="d-flex flex-wrap gap-2 justify-content-center">
-        <a href="<?php echo ROOT_URL; ?>/views/backend/security/signup.php" class="btn btn-sleep-primary btn-sm">
-          <span>➕ Inscrire un profil siesteur</span>
-        </a>
-        <button onclick="resetSleeperDeck()" class="btn btn-outline-light btn-sm">
-          <span>🔄 Recharger la sélection</span>
+  <?php if ($isLoggedIn) { ?>
+    <!-- DISPOSITION MEMBRE CONNECTE : Colonne gauche (Matchs/Likes) + Colonne droite (Tinder Deck) -->
+    <div class="row g-4 align-items-start">
+
+      <!-- COLONNE GAUCHE : Mes Matchs & Profils Likés -->
+      <div class="col-12 col-lg-5 col-xl-5">
+        <div class="sleepers-side-panel">
+          <!-- Onglets de navigation -->
+          <div class="sleepers-panel-tabs mb-3">
+            <button type="button" class="sleepers-tab-btn active" id="tabBtnMatches" onclick="switchSideTab('matches')">
+              <span>💤 Mes Matchs</span>
+              <span id="badgeMatchesCount" class="badge rounded-pill bg-danger ms-1">0</span>
+            </button>
+            <button type="button" class="sleepers-tab-btn" id="tabBtnLiked" onclick="switchSideTab('liked')">
+              <span>❤️ Profils Likés</span>
+              <span id="badgeLikedCount" class="badge rounded-pill bg-purple-700 ms-1">0</span>
+            </button>
+          </div>
+
+          <!-- Onglet 1 : Mes Matchs (avec avis & possibilité de commenter) -->
+          <div id="tabContentMatches" class="sleepers-tab-content">
+            <div id="matchesContainer">
+              <div class="text-center py-4 text-white-50 small">Chargement de vos matchs...</div>
+            </div>
+          </div>
+
+          <!-- Onglet 2 : Profils Likés (avec possibilité de retirer le like) -->
+          <div id="tabContentLiked" class="sleepers-tab-content d-none">
+            <div id="likedContainer">
+              <div class="text-center py-4 text-white-50 small">Chargement de vos profils likés...</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- COLONNE DROITE : Pile de Cartes Tinder -->
+      <div class="col-12 col-lg-7 col-xl-7">
+        <div class="tinder-app-container my-0">
+          
+          <!-- État quand tous les profils ont été swipés -->
+          <div id="deckEmptyState" class="tinder-empty-deck w-100">
+            <div style="font-size: 3.5rem;" class="mb-3">😴💤</div>
+            <h4 class="fw-bold text-white mb-2">Tous les siesteurs ont été vus !</h4>
+            <p class="text-white-50 small mb-3">
+              Vous avez fait le tour de tous les profils disponibles pour le moment.
+            </p>
+            <div class="d-flex flex-wrap gap-2 justify-content-center">
+              <button onclick="resetSleeperDeck()" class="btn btn-outline-light btn-sm">
+                <span>🔄 Revoir la sélection</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- Pile de cartes -->
+          <div id="tinderDeck" class="tinder-deck-wrapper">
+            <!-- Rendu interactif en JavaScript -->
+          </div>
+
+          <!-- Barre d'actions Tinder : Annuler, Passer, Like -->
+          <div id="tinderControls" class="tinder-action-bar">
+            <button type="button" class="tinder-btn tinder-btn-small tinder-btn-rewind" onclick="rewindLastSwipe()" title="Annuler le dernier choix">
+              ↺
+            </button>
+            <button type="button" class="tinder-btn tinder-btn-large tinder-btn-nope" onclick="handleSwipeBtn('pass')" title="Passer ce profil">
+              ✕
+            </button>
+            <button type="button" class="tinder-btn tinder-btn-large tinder-btn-like" onclick="handleSwipeBtn('like')" title="Dormir ensemble (Like)">
+              💤
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+  <?php } else { ?>
+
+    <!-- DISPOSITION VISITEUR NON CONNECTE : Deck centré -->
+    <div class="tinder-app-container my-0">
+      
+      <!-- État vide -->
+      <div id="deckEmptyState" class="tinder-empty-deck w-100">
+        <div style="font-size: 3.5rem;" class="mb-3">😴💤</div>
+        <h4 class="fw-bold text-white mb-2">Découvrez les siesteurs</h4>
+        <p class="text-white-50 small mb-3">
+          Créez votre compte pour explorer l'ensemble des membres et convenir d'une sieste à deux.
+        </p>
+        <div class="d-flex gap-2">
+          <a href="<?php echo ROOT_URL; ?>/views/backend/security/signup.php" class="btn btn-sleep-primary btn-sm">
+            <span>✨ Rejoindre Sleepers</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Pile de cartes -->
+      <div id="tinderDeck" class="tinder-deck-wrapper">
+        <!-- Rendu dynamique par JavaScript -->
+      </div>
+
+      <!-- Barre d'actions Tinder -->
+      <div id="tinderControls" class="tinder-action-bar">
+        <button type="button" class="tinder-btn tinder-btn-small tinder-btn-rewind" onclick="rewindLastSwipe()" title="Annuler le dernier choix">
+          ↺
+        </button>
+        <button type="button" class="tinder-btn tinder-btn-large tinder-btn-nope" onclick="handleSwipeBtn('pass')" title="Passer ce profil">
+          ✕
+        </button>
+        <button type="button" class="tinder-btn tinder-btn-large tinder-btn-like" onclick="handleSwipeBtn('like')" title="Dormir ensemble (Like)">
+          💤
         </button>
       </div>
+
     </div>
 
-    <!-- Pile de cartes interactives -->
-    <div id="tinderDeck" class="tinder-deck-wrapper">
-      <!-- Rendu dynamique par JavaScript avec les données réelles de la table USER -->
-    </div>
-
-    <!-- Barre d'actions Tinder -->
-    <div id="tinderControls" class="tinder-action-bar">
-      <button type="button" class="tinder-btn tinder-btn-small tinder-btn-rewind" onclick="rewindLastSwipe()" title="Annuler le dernier choix">
-        ↺
-      </button>
-      <button type="button" class="tinder-btn tinder-btn-large tinder-btn-nope" onclick="handleSwipeBtn('pass')" title="Passer (Pas pour cette sieste)">
-        ✕
-      </button>
-      <button type="button" class="tinder-btn tinder-btn-small tinder-btn-super" onclick="handleSwipeBtn('super')" title="Super Sieste !">
-        ⭐
-      </button>
-      <button type="button" class="tinder-btn tinder-btn-large tinder-btn-like" onclick="handleSwipeBtn('like')" title="Envie de dormir ensemble !">
-        💤
-      </button>
-      <button type="button" class="tinder-btn tinder-btn-small tinder-btn-comment" onclick="handleCommentBtn()" title="Envoyer un mot doux">
-        💬
-      </button>
-    </div>
-
-  </div>
-
-  <!-- =========================================================================
-       3 PILIERS DE SLEEPERS
-       ========================================================================= -->
-  <div class="row g-4 mt-5 mb-5 pb-4">
-    <div class="col-md-4">
-      <div class="sleepers-feature-card">
-        <div class="sleepers-feature-icon">🛏️</div>
-        <h4 class="fw-bold mb-2">Compatibilité literie</h4>
-        <p class="text-white-50 small mb-0">Plutôt couette en duvet ou drap léger ? 4 oreillers moelleux ou un seul plat ? Trouvez quelqu'un qui partage vos exigences de confort.</p>
+    <!-- =========================================================================
+         3 PILIERS DE SLEEPERS (Présents UNIQUEMENT pour les visiteurs non connectés)
+         ========================================================================= -->
+    <div class="row g-4 mt-5 mb-5 pb-4">
+      <div class="col-md-4">
+        <div class="sleepers-feature-card">
+          <div class="sleepers-feature-icon">🛏️</div>
+          <h4 class="fw-bold mb-2">Compatibilité literie</h4>
+          <p class="text-white-50 small mb-0">Plutôt couette en duvet ou drap léger ? 4 oreillers moelleux ou un seul plat ? Trouvez quelqu'un qui partage vos exigences de confort.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="sleepers-feature-card">
+          <div class="sleepers-feature-icon">⏱️</div>
+          <h4 class="fw-bold mb-2">Rythme synchronisé</h4>
+          <p class="text-white-50 small mb-0">Micro-sieste de 20 minutes en début d'après-midi ou sieste marathon de 3 heures le dimanche ? Matchez selon la durée qui vous convient.</p>
+        </div>
+      </div>
+      <div class="col-md-4">
+        <div class="sleepers-feature-card">
+          <div class="sleepers-feature-icon">☕</div>
+          <h4 class="fw-bold mb-2">Le réveil en douceur</h4>
+          <p class="text-white-50 small mb-0">Finis les réveils brutaux. Nos membres s'engagent à se réveiller avec respect, murmures et option café ou thé chaud.</p>
+        </div>
       </div>
     </div>
-    <div class="col-md-4">
-      <div class="sleepers-feature-card">
-        <div class="sleepers-feature-icon">⏱️</div>
-        <h4 class="fw-bold mb-2">Rythme synchronisé</h4>
-        <p class="text-white-50 small mb-0">Micro-sieste de 20 minutes en début d'après-midi ou sieste marathon de 3 heures le dimanche ? Matchez selon la durée qui vous convient.</p>
-      </div>
-    </div>
-    <div class="col-md-4">
-      <div class="sleepers-feature-card">
-        <div class="sleepers-feature-icon">☕</div>
-        <h4 class="fw-bold mb-2">Le réveil en douceur</h4>
-        <p class="text-white-50 small mb-0">Finis les réveils brutaux. Nos membres s'engagent à se réveiller avec respect, murmures et option café ou thé chaud.</p>
-      </div>
-    </div>
-  </div>
+
+  <?php } ?>
 
 </main>
 
@@ -219,14 +291,14 @@ unset($p);
     <div style="font-size: 3rem;" class="mb-2">🔒💤</div>
     <h3 class="fw-bold text-white mb-2">Connexion requise</h3>
     <p class="text-white-50 small mb-3">
-      Pour <span id="authActionText" class="text-white fw-semibold">interagir avec ce siesteur</span> et trouver votre partenaire de sieste idéal, vous devez posséder un compte membre.
+      Pour <span id="authActionText" class="text-white fw-semibold">interagir avec ce siesteur</span> et trouver votre partenaire de sieste idéal, vous devez posséder un compte.
     </p>
     <div class="d-flex flex-column gap-2 mb-3">
       <a href="<?php echo ROOT_URL; ?>/views/backend/security/login.php" class="btn btn-sleep-primary py-2">
         <span>🔑 Se connecter</span>
       </a>
       <a href="<?php echo ROOT_URL; ?>/views/backend/security/signup.php" class="btn btn-sleep-secondary py-2">
-        <span>✨ Créer mon compte (gratuit)</span>
+        <span>✨ Créer mon compte</span>
       </a>
     </div>
     <button type="button" onclick="closeAuthModal()" class="btn btn-link text-white-50 btn-sm text-decoration-none">
@@ -236,7 +308,7 @@ unset($p);
 </div>
 
 <!-- =========================================================================
-     MODALE : C'EST UN MATCH ! (Lors d'un match réel en BDD)
+     MODALE : C'EST UN MATCH ! (Lors d'un like réciproque)
      ========================================================================= -->
 <div id="matchModal" class="sleepers-match-modal">
   <div class="sleepers-match-card">
@@ -247,49 +319,28 @@ unset($p);
     </p>
 
     <div class="match-avatars">
-      <img id="matchMyAvatar" src="<?php echo !empty($currentUser['photo']) && (str_starts_with($currentUser['photo'], 'http') || preg_match('/\.(jpg|jpeg|png|webp)$/i', $currentUser['photo'])) ? htmlspecialchars($currentUser['photo'], ENT_QUOTES) : 'https://i.pravatar.cc/150?u=sleepers_' . ($isLoggedIn ? (int)ID_USER : 'me'); ?>" class="match-avatar" />
-      <img id="matchPartnerAvatar" src="" class="match-avatar match-avatar-partner" />
+      <img id="matchMyAvatar" src="<?php echo $currentUserPhoto ?: 'https://i.pravatar.cc/150?u=me'; ?>" class="match-avatar" alt="Moi" />
+      <img id="matchPartnerAvatar" src="" class="match-avatar match-avatar-partner" alt="Partenaire" />
     </div>
 
     <div class="d-flex flex-column gap-2">
-      <button type="button" onclick="openMatchChatFromModal()" class="btn btn-sleep-primary w-100 py-2">
-        <span>💬 Proposer une sieste</span>
+      <button type="button" onclick="closeMatchModal(); switchSideTab('matches');" class="btn btn-sleep-primary w-100 py-2">
+        <span>💤 Voir mes matchs &amp; avis</span>
       </button>
       <button type="button" onclick="closeMatchModal()" class="btn btn-outline-light btn-sm w-100 py-2">
-        💤 Continuer à explorer
+        Continuer à explorer
       </button>
     </div>
   </div>
 </div>
 
 <!-- =========================================================================
-     TIROIR : VOS MATCHS & DISCUSSIONS (Table MATCHS & COMMENTS)
-     ========================================================================= -->
-<div id="matchDrawer" class="sleepers-drawer" onclick="if(event.target===this) toggleMatchDrawer();">
-  <div class="sleepers-drawer-content">
-    <div class="d-flex justify-content-between align-items-center mb-3 pb-2 border-bottom border-secondary">
-      <h5 class="fw-bold text-white mb-0 d-flex align-items-center gap-2">
-        <span>💤</span> Vos Matchs de Sieste
-      </h5>
-      <button type="button" class="btn-close btn-close-white" onclick="toggleMatchDrawer()"></button>
-    </div>
-    
-    <div id="matchesListContainer">
-      <div class="text-center py-4 text-white-50 small">Chargement de vos matchs...</div>
-    </div>
-  </div>
-</div>
-
-<!-- =========================================================================
-     SCRIPT INTERACTIF TINDER DE LA SIESTE
+     SCRIPT D'INTERACTION & GESTION DES MATCHS / LIKES
      ========================================================================= -->
 <script>
-  // État d'authentification
   const IS_LOGGED_IN = <?php echo $isLoggedIn ? 'true' : 'false'; ?>;
   const CURRENT_USER_ID = <?php echo $isLoggedIn ? (int)ID_USER : 'null'; ?>;
-
-  // Profils réels issus de la table USER de la base TINDER22
-  const RAW_DB_PROFILES = <?php echo json_encode($dbProfiles, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
+  const RAW_PROFILES = <?php echo json_encode($dbProfiles, JSON_HEX_TAG | JSON_HEX_APOS | JSON_HEX_QUOT | JSON_HEX_AMP); ?>;
 
   function escapeHtml(str) {
     if (!str) return '';
@@ -301,8 +352,8 @@ unset($p);
       .replace(/'/g, '&#039;');
   }
 
-  // Traitement et préparation des profils réels de la BDD avec les préférences JSON
-  let deckProfiles = (RAW_DB_PROFILES || []).map(p => {
+  // Préparation des cartes pour le deck Tinder
+  let deckProfiles = (RAW_PROFILES || []).map(p => {
     let photoUrl = '';
     const traits = p.sleep_traits || {};
     let bedDescription = traits.bed_type || '';
@@ -315,7 +366,6 @@ unset($p);
       photoUrl = `https://i.pravatar.cc/500?u=sleepers_${p.idUser}`;
     }
 
-    // Récupérer les habitudes et tags personnalisés depuis le JSON
     let habits = traits.sleep_habits || [];
     if (!habits || habits.length === 0) {
       habits = [
@@ -336,8 +386,6 @@ unset($p);
       napDuration: traits.nap_duration || '',
       dreamer: traits.dreamer,
       sleepSound: traits.sleep_sound || '',
-      pillowCount: traits.pillow_count || '',
-      wakeUpStyle: traits.wake_up_style || '',
       biographie: p.biographie && p.biographie.trim() !== '' ? p.biographie : (traits.ideal_partner || 'Adepte des après-midis calmes et des siestes réparatrices.'),
       habits: habits
     };
@@ -352,18 +400,23 @@ unset($p);
   const tinderControls = document.getElementById('tinderControls');
 
   function renderDeck() {
+    if (!tinderDeck) return;
     tinderDeck.innerHTML = '';
 
     if (activeProfiles.length === 0) {
-      deckEmptyState.classList.add('show');
-      tinderControls.style.opacity = '0.4';
-      tinderControls.style.pointerEvents = 'none';
+      if (deckEmptyState) deckEmptyState.classList.add('show');
+      if (tinderControls) {
+        tinderControls.style.opacity = '0.4';
+        tinderControls.style.pointerEvents = 'none';
+      }
       return;
     }
 
-    deckEmptyState.classList.remove('show');
-    tinderControls.style.opacity = '1';
-    tinderControls.style.pointerEvents = 'auto';
+    if (deckEmptyState) deckEmptyState.classList.remove('show');
+    if (tinderControls) {
+      tinderControls.style.opacity = '1';
+      tinderControls.style.pointerEvents = 'auto';
+    }
 
     activeProfiles.forEach((profile, index) => {
       const isTop = index === 0;
@@ -371,14 +424,13 @@ unset($p);
       card.className = 'tinder-profile-card tinder-card-transition';
       card.id = `card-profile-${profile.idUser}`;
 
-      // Empilement visuel façon Tinder
       const scale = 1 - index * 0.04;
       const translateY = index * 8;
       card.style.transform = `translateY(${translateY}px) scale(${scale})`;
       card.style.zIndex = 30 - index;
 
-      const habitsHtml = (profile.habits || ['🛌 Plaid douillet', '⏱️ 30 min', '💤 Rêveur']).map(h => 
-        `<span class="tinder-pill-habit">${h}</span>`
+      const habitsHtml = (profile.habits || []).map(h => 
+        `<span class="tinder-pill-habit">${escapeHtml(h)}</span>`
       ).join('');
 
       const ageText = profile.age ? `, <span class="tinder-profile-age">${profile.age} ans</span>` : '';
@@ -394,7 +446,7 @@ unset($p);
         <div class="tinder-stamp tinder-stamp-nope">PASSER ❌</div>
 
         <div class="tinder-badge-top">
-          <span class="tinder-tag">ID #${profile.idUser}</span>
+          <span class="tinder-tag">Siesteur</span>
           <span class="tinder-tag tinder-tag-genre">${escapeHtml(profile.libGenr || 'Sieste')}</span>
         </div>
 
@@ -420,7 +472,7 @@ unset($p);
     });
   }
 
-  // Gestes tactiles et glisser-déposer de la carte supérieure
+  // Gestes tactiles & glisser-déposer de la carte supérieure
   function attachGestures(cardEl, profile) {
     let startX = 0, startY = 0, currentX = 0, currentY = 0;
     let isDragging = false;
@@ -463,7 +515,6 @@ unset($p);
 
       const threshold = 110;
 
-      // SI NON CONNECTE : l'utilisateur ne peut rien faire en BDD -> retour en place et modal de connexion
       if (!IS_LOGGED_IN) {
         if (Math.abs(currentX) > threshold) {
           cardEl.style.transform = 'translate(0px, 0px) rotate(0deg)';
@@ -494,13 +545,12 @@ unset($p);
     window.addEventListener('touchend', onEnd);
   }
 
-  // Clic sur les boutons de contrôle
+  // Clic sur boutons de contrôle (Passer ou Like)
   function handleSwipeBtn(action) {
     if (activeProfiles.length === 0) return;
 
-    // Protection utilisateur non connecté
     if (!IS_LOGGED_IN) {
-      showAuthModal(action === 'like' ? 'liker' : (action === 'pass' ? 'passer' : 'envoyer une super-sieste'));
+      showAuthModal(action === 'like' ? 'liker' : 'passer');
       return;
     }
 
@@ -508,31 +558,28 @@ unset($p);
     executeSwipe(action, profile);
   }
 
-  function handleCommentBtn() {
-    if (!IS_LOGGED_IN) {
-      showAuthModal('envoyer un mot doux');
-      return;
-    }
-    promptQuickComment();
-  }
-
-  // Animation et enregistrement du Swipe en BDD
   function executeSwipe(action, profile) {
     const cardEl = document.getElementById(`card-profile-${profile.idUser}`);
     if (cardEl) {
       cardEl.classList.add('tinder-card-transition');
-      const flyX = action === 'like' ? 650 : (action === 'pass' ? -650 : 0);
-      const flyY = action === 'super' ? -650 : 0;
-      const rotate = action === 'like' ? 25 : (action === 'pass' ? -25 : 0);
-      cardEl.style.transform = `translate(${flyX}px, ${flyY}px) rotate(${rotate}deg)`;
+      const flyX = action === 'like' ? 650 : -650;
+      const rotate = action === 'like' ? 25 : -25;
+      cardEl.style.transform = `translate(${flyX}px, 0px) rotate(${rotate}deg)`;
       cardEl.style.opacity = '0';
     }
 
-    // Appel API réel qui insère directement dans la table LIKES (et MATCHS si réciproque)
+    // Appel API pour persister le like
     sendSwipeToApi(profile.idUser, action, function(isMatch, partner) {
       if (isMatch) {
         showMatchModal(partner || profile);
-        loadMatches();
+        if (IS_LOGGED_IN) {
+          loadMatchedUsers();
+          loadLikedUsers();
+        }
+      } else {
+        if (IS_LOGGED_IN && action === 'like') {
+          loadLikedUsers();
+        }
       }
     });
 
@@ -558,12 +605,12 @@ unset($p);
         callback(data.is_match, data.partner);
       }
     })
-    .catch(err => console.error('Erreur API swipe:', err));
+    .catch(err => console.error('Erreur swipe:', err));
   }
 
   function rewindLastSwipe() {
     if (swipeHistory.length === 0) {
-      alert("Aucun swipe précédent à annuler.");
+      alert("Aucun choix précédent à annuler.");
       return;
     }
     const last = swipeHistory.pop();
@@ -590,7 +637,7 @@ unset($p);
     document.getElementById('authRequiredModal').classList.remove('show');
   }
 
-  // Modale C'est un Match (déclenchée lors d'un vrai match réciproque en BDD)
+  // Modale Match
   function showMatchModal(partner) {
     currentMatchPartner = partner;
     document.getElementById('matchPartnerName').textContent = partner.name || partner.prenomUser;
@@ -602,103 +649,215 @@ unset($p);
     document.getElementById('matchModal').classList.remove('show');
   }
 
-  function openMatchChatFromModal() {
-    closeMatchModal();
-    if (currentMatchPartner) {
-      promptQuickComment(currentMatchPartner);
+  // =========================================================================
+  // GESTION DU PANNEAU GAUCHE : ONGLETS MATCHS & LIKES
+  // =========================================================================
+
+  function switchSideTab(tabName) {
+    const tabMatches = document.getElementById('tabContentMatches');
+    const tabLiked = document.getElementById('tabContentLiked');
+    const btnMatches = document.getElementById('tabBtnMatches');
+    const btnLiked = document.getElementById('tabBtnLiked');
+
+    if (tabName === 'matches') {
+      if (tabMatches) tabMatches.classList.remove('d-none');
+      if (tabLiked) tabLiked.classList.add('d-none');
+      if (btnMatches) btnMatches.classList.add('active');
+      if (btnLiked) btnLiked.classList.remove('active');
+      loadMatchedUsers();
+    } else {
+      if (tabMatches) tabMatches.classList.add('d-none');
+      if (tabLiked) tabLiked.classList.remove('d-none');
+      if (btnMatches) btnMatches.classList.remove('active');
+      if (btnLiked) btnLiked.classList.add('active');
+      loadLikedUsers();
     }
   }
 
-  // Envoi d'un message doux stocké dans la table COMMENTS
-  function promptQuickComment(targetPartner) {
-    const partner = targetPartner || (activeProfiles.length > 0 ? activeProfiles[0] : currentMatchPartner);
-    if (!partner) return;
-
-    const partnerName = partner.name || partner.prenomUser;
-    const partnerId = partner.id || partner.idUser;
-
-    const message = prompt(`Envoyer un mot doux (enregistré dans la table COMMENTS) à ${partnerName} :`, "Coucou, partante pour une sieste au calme ce week-end ? 🛏️");
-    if (message && message.trim() !== '') {
-      const formData = new FormData();
-      formData.append('targetId', partnerId);
-      formData.append('message', message.trim());
-
-      fetch('<?php echo ROOT_URL; ?>/api/security/comment.php', {
-        method: 'POST',
-        body: formData
-      })
-      .then(res => res.json())
-      .then(data => {
-        alert(`Message enregistré en BDD dans COMMENTS pour ${partnerName} : « ${data.message} » 💌`);
-        loadMatches();
-      })
-      .catch(err => {
-        console.error('Erreur API comment:', err);
-      });
-    }
-  }
-
-  // Gestion du tiroir des matchs
-  function toggleMatchDrawer() {
-    if (!IS_LOGGED_IN) {
-      showAuthModal('voir vos matchs');
-      return;
-    }
-    const drawer = document.getElementById('matchDrawer');
-    drawer.classList.toggle('show');
-    if (drawer.classList.contains('show')) {
-      loadMatches();
-    }
-  }
-
-  // Récupération des matchs réels depuis la table MATCHS
-  function loadMatches() {
+  // 1. Charger et afficher les Matchs avec leurs commentaires
+  function loadMatchedUsers() {
     if (!IS_LOGGED_IN) return;
 
-    fetch('<?php echo ROOT_URL; ?>/api/security/matches.php')
+    fetch('<?php echo ROOT_URL; ?>/api/security/matched_users.php')
     .then(res => res.json())
     .then(data => {
-      const container = document.getElementById('matchesListContainer');
-      const badge = document.getElementById('badgeMatchCount');
+      const container = document.getElementById('matchesContainer');
+      const badge = document.getElementById('badgeMatchesCount');
 
       let matches = data.matches || [];
       if (badge) badge.textContent = matches.length;
 
+      if (!container) return;
+
       if (matches.length === 0) {
-        container.innerHTML = '<div class="text-center py-4 text-white-50 small">Aucun match dans la table <code>MATCHS</code> pour le moment.<br>Likez un profil qui vous like en retour pour créer un match réel ! 💤</div>';
+        container.innerHTML = `
+          <div class="text-center py-5 text-white-50">
+            <div class="fs-1 mb-2">😴💤</div>
+            <div class="fw-semibold text-white mb-1">Aucun match pour l'instant</div>
+            <div class="small">Likez les profils qui vous plaisent dans la pile de cartes pour déclencher un match réciproque !</div>
+          </div>
+        `;
         return;
       }
 
-      let html = '<div class="d-flex flex-column gap-2">';
+      let html = '<div class="d-flex flex-column gap-3">';
       matches.forEach(m => {
-        const photoSrc = m.photo && (m.photo.startsWith('http') || m.photo.match(/\.(jpg|jpeg|png|webp)$/i)) 
-          ? m.photo 
-          : `https://i.pravatar.cc/150?u=sleepers_${m.id}`;
+        let commentsHtml = '';
+        if (m.comments && m.comments.length > 0) {
+          commentsHtml = m.comments.map(c => `
+            <div class="sleepers-comment-bubble mb-2">
+              <span class="fw-bold text-white small">${escapeHtml(c.authorName || 'Membre')} :</span>
+              <span class="text-white-50 small ms-1">${escapeHtml(c.libComment)}</span>
+            </div>
+          `).join('');
+        } else {
+          commentsHtml = '<div class="text-white-50 small fst-italic mb-2">Aucun avis laissé sur ce profil pour le moment.</div>';
+        }
 
         html += `
-          <div class="d-flex align-items-center gap-3 p-2 rounded-3" style="background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.08);">
-            <img src="${photoSrc}" class="rounded-circle object-fit-cover" style="width: 48px; height: 48px;" />
-            <div class="flex-grow-1 min-w-0">
-              <div class="d-flex justify-content-between align-items-baseline">
-                <span class="fw-bold text-white small">${escapeHtml(m.name)} (#${m.id})</span>
-                <span class="text-purple-300" style="font-size: 0.7rem;">Match BDD</span>
+          <div class="sleepers-match-card-item p-3 rounded-4" id="match-item-${m.id}">
+            <div class="d-flex align-items-center gap-3 mb-2">
+              <img src="${m.photo}" class="rounded-circle object-fit-cover border border-purple-400" style="width: 52px; height: 52px;" alt="${escapeHtml(m.name)}" />
+              <div class="flex-grow-1 min-w-0">
+                <div class="d-flex justify-content-between align-items-baseline">
+                  <span class="fw-bold text-white fs-6">${escapeHtml(m.name)}${m.age ? ', ' + m.age + ' ans' : ''}</span>
+                  <span class="badge bg-success" style="font-size: 0.7rem;">Match</span>
+                </div>
+                <div class="small text-purple-300 text-truncate">🛏️ ${escapeHtml(m.bedType)}</div>
               </div>
-              <div class="text-white-50 text-truncate small">${escapeHtml(m.lastComment || 'Match enregistré en BDD ! Envoyez un mot doux.')}</div>
             </div>
-            <button onclick="promptQuickComment({id: ${m.id}, name: '${escapeHtml(m.name)}'})" class="btn btn-sm btn-outline-light rounded-circle" style="width: 32px; height: 32px; padding: 0;">💬</button>
+
+            <!-- Section Avis & Commentaires sur la personne matchée -->
+            <div class="mt-2 pt-2 border-top border-secondary">
+              <div class="small fw-semibold text-white mb-2">💬 Avis sur ${escapeHtml(m.prenomUser)} :</div>
+              <div class="mb-2" id="comments-list-${m.id}">
+                ${commentsHtml}
+              </div>
+
+              <!-- Formulaire d'ajout d'un commentaire sur cette personne matchée -->
+              <form onsubmit="submitMatchComment(event, ${m.id})" class="d-flex gap-2 mt-2">
+                <input type="text" name="comment" class="form-control form-control-sm" placeholder="Ajouter un avis sur ${escapeHtml(m.prenomUser)}..." maxlength="300" required />
+                <button type="submit" class="btn btn-sm btn-sleep-primary px-3">Publier</button>
+              </form>
+            </div>
           </div>
         `;
       });
       html += '</div>';
       container.innerHTML = html;
     })
-    .catch(err => console.error('Erreur API matches:', err));
+    .catch(err => console.error('Erreur chargement matchs:', err));
+  }
+
+  // 2. Publier un avis sur une personne matchée
+  function submitMatchComment(event, targetId) {
+    event.preventDefault();
+    const form = event.target;
+    const input = form.querySelector('input[name="comment"]');
+    const commentText = input ? input.value.trim() : '';
+
+    if (!commentText) return;
+
+    const formData = new FormData();
+    formData.append('targetId', targetId);
+    formData.append('comment', commentText);
+
+    fetch('<?php echo ROOT_URL; ?>/api/security/add_match_comment.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        input.value = '';
+        loadMatchedUsers();
+      } else {
+        alert(data.error || 'Impossible d\'enregistrer le commentaire.');
+      }
+    })
+    .catch(err => console.error('Erreur publication avis:', err));
+  }
+
+  // 3. Charger et afficher les profils likés avec bouton Unlike
+  function loadLikedUsers() {
+    if (!IS_LOGGED_IN) return;
+
+    fetch('<?php echo ROOT_URL; ?>/api/security/liked_users.php')
+    .then(res => res.json())
+    .then(data => {
+      const container = document.getElementById('likedContainer');
+      const badge = document.getElementById('badgeLikedCount');
+
+      let liked = data.liked || [];
+      if (badge) badge.textContent = liked.length;
+
+      if (!container) return;
+
+      if (liked.length === 0) {
+        container.innerHTML = `
+          <div class="text-center py-5 text-white-50">
+            <div class="fs-1 mb-2">❤️</div>
+            <div class="fw-semibold text-white mb-1">Aucun profil liké pour le moment</div>
+            <div class="small">Swipez vers la droite sur les profils pour leur envoyer un like !</div>
+          </div>
+        `;
+        return;
+      }
+
+      let html = '<div class="d-flex flex-column gap-2">';
+      liked.forEach(l => {
+        html += `
+          <div class="sleepers-liked-card-item p-3 rounded-4 d-flex align-items-center justify-content-between gap-3" id="liked-item-${l.id}">
+            <div class="d-flex align-items-center gap-3 min-w-0">
+              <img src="${l.photo}" class="rounded-circle object-fit-cover border border-secondary" style="width: 48px; height: 48px;" alt="${escapeHtml(l.name)}" />
+              <div class="min-w-0">
+                <div class="fw-bold text-white fs-6 text-truncate">${escapeHtml(l.name)}${l.age ? ', ' + l.age + ' ans' : ''}</div>
+                <div class="small text-white-50 text-truncate">🛏️ ${escapeHtml(l.bedType)}</div>
+                ${l.isMatched ? '<span class="badge bg-success" style="font-size: 0.68rem;">Match réciproque</span>' : '<span class="badge bg-secondary" style="font-size: 0.68rem;">En attente</span>'}
+              </div>
+            </div>
+            <div>
+              <button onclick="unlikeProfile(${l.id}, '${escapeHtml(l.name)}')" class="btn btn-sm btn-outline-danger d-flex align-items-center gap-1 py-1 px-2" title="Retirer mon like">
+                <span>💔 Unlike</span>
+              </button>
+            </div>
+          </div>
+        `;
+      });
+      html += '</div>';
+      container.innerHTML = html;
+    })
+    .catch(err => console.error('Erreur chargement likes:', err));
+  }
+
+  // 4. Retirer un like (Unlike)
+  function unlikeProfile(targetId, targetName) {
+    if (!confirm(`Retirer votre like pour ${targetName} ?`)) return;
+
+    const formData = new FormData();
+    formData.append('targetId', targetId);
+
+    fetch('<?php echo ROOT_URL; ?>/api/security/unlike.php', {
+      method: 'POST',
+      body: formData
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.success) {
+        loadLikedUsers();
+        loadMatchedUsers();
+      } else {
+        alert(data.error || 'Erreur lors du retrait du like.');
+      }
+    })
+    .catch(err => console.error('Erreur unlike:', err));
   }
 
   // Initialisation au chargement de la page
   renderDeck();
   if (IS_LOGGED_IN) {
-    loadMatches();
+    loadMatchedUsers();
+    loadLikedUsers();
   }
 </script>
 

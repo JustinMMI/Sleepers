@@ -16,13 +16,13 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
         </div>
     </div>
 
-    <!-- Section Options Sleepers & Paramètres JSON -->
+    <!-- Section Options Sleepers -->
     <div class="card p-4 shadow-sm mb-4" style="border: 1px solid var(--sleep-border-purple); background: var(--sleep-bg-card);">
         <div class="d-flex justify-content-between align-items-center flex-wrap gap-3 mb-3">
             <div>
                 <h4 class="fw-bold text-white mb-1">⚙️ Configuration Sleepers</h4>
                 <p class="text-white-50 small mb-0">
-                    Options du site enregistrées dans le fichier JSON (sans modifier la BDD SQL).
+                    Options générales et préférences de la plateforme.
                 </p>
             </div>
             <?php if (isset($_GET['saved'])) { ?>
@@ -35,9 +35,9 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
         <div class="p-3 rounded-3" style="background: rgba(255, 255, 255, 0.03); border: 1px solid rgba(255, 255, 255, 0.1);">
             <div class="d-flex justify-content-between align-items-center flex-wrap gap-3">
                 <div>
-                    <div class="fw-bold text-white">Sélecteur de comptes "Test BDD" (Page d'accueil)</div>
+                    <div class="fw-bold text-white">Sélecteur de comptes "Mode Démo" (Page d'accueil)</div>
                     <div class="small text-white-50 mt-1">
-                        Permet de switcher en 1 clic entre les profils de la BDD pour tester les swipes et matchs.
+                        Permet de tester la plateforme en switchant en 1 clic entre les profils pour explorer les swipes et matchs.
                     </div>
                     <div class="small mt-2">
                         <span class="text-white-50">État actuel :</span>
@@ -60,9 +60,9 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
         </div>
     </div>
 
-    <!-- Gestion des tables de la BDD -->
+    <!-- Gestion des données de la plateforme -->
     <div class="card p-4 shadow-sm mb-4" style="background: var(--sleep-bg-card);">
-        <h4 class="fw-bold text-white mb-3">🗄️ Gestion des Données BDD</h4>
+        <h4 class="fw-bold text-white mb-3">🗄️ Gestion des Données</h4>
         <div class="table-responsive">
             <table class="table table-dark table-striped align-middle mb-0">
                 <thead>
@@ -107,7 +107,7 @@ $isTestBdd = function_exists('is_test_bdd_enabled') ? is_test_bdd_enabled() : fa
                                 <a href="<?php echo ROOT_URL; ?>/views/backend/comments/list.php" class="btn btn-danger">Delete</a>
                             </div>
                         </td>
-                        <td class="text-white-50 small">Mots doux échangés entre partenaires</td>
+                        <td class="text-white-50 small">Avis laissés entre partenaires de sieste matchés</td>
                     </tr>
                     <tr>
                         <td class="fw-semibold">Likes</td>

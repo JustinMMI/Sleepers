@@ -60,3 +60,4 @@ api_json(array(
     'authorName' => $author['prenomUser'] ?? 'Vous',
     'message' => 'Commentaire enregistré avec succès.'
 ));
+

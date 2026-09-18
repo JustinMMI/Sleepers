@@ -37,3 +37,4 @@ api_json(array(
     'targetId' => $targetId,
     'message' => 'Le like a été retiré avec succès.'
 ));
+

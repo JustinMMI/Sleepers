@@ -32,7 +32,7 @@
         </li>
         <?php if (defined('ID_USER')) { ?>
           <li class="nav-item">
-            <a class="nav-link" href="#" id="navMatchesLink" onclick="if(typeof toggleMatchDrawer === 'function'){toggleMatchDrawer(); return false;}">💤 Mes Matchs</a>
+            <a class="nav-link" href="<?php echo ROOT_URL; ?>/#matches" onclick="if(typeof switchSideTab === 'function'){switchSideTab('matches'); const el = document.getElementById('matchesContainer'); if(el) el.scrollIntoView({behavior: 'smooth'}); return false;}">💤 Mes Matchs</a>
           </li>
           <li class="nav-item">
             <a class="nav-link" href="<?php echo ROOT_URL; ?>/views/backend/security/profile.php">🛏️ Mon Profil Sieste</a>

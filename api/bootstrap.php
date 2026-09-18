@@ -91,3 +91,16 @@ function api_relation_exists($table, $firstField, $first, $secondField, $second)
         array(':first' => $first, ':second' => $second)
     )->fetchColumn() !== false;
 }
+
+function api_json($data, $statusCode = 200)
+{
+    http_response_code($statusCode);
+    header('Content-Type: application/json; charset=utf-8');
+    echo json_encode($data, JSON_UNESCAPED_UNICODE);
+    exit;
+}
+
+function api_error($statusCode, $message)
+{
+    api_json(array('success' => false, 'error' => $message), $statusCode);
+}
