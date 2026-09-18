@@ -14,6 +14,19 @@ $fields = array(
 	'biographie' => api_input('biographie', false),
 );
 
+if ($fields['emailUser'] !== '' && !filter_var($fields['emailUser'], FILTER_VALIDATE_EMAIL)) {
+	http_response_code(400);
+	exit('Adresse email invalide');
+}
+
+if ($fields['emailUser'] !== '' && api_execute(
+	'SELECT 1 FROM `USER` WHERE emailUser = :emailUser AND idUser <> :idUser LIMIT 1',
+	array(':emailUser' => $fields['emailUser'], ':idUser' => $idUser)
+)->fetchColumn() !== false) {
+	http_response_code(409);
+	exit('Cette adresse email est deja utilisee');
+}
+
 $set = array();
 $parameters = array(':idUser' => $idUser);
 foreach ($fields as $field => $value) {

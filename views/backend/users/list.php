@@ -3,6 +3,7 @@ include '../../../header.php'; // contains the header and call to config.php
 require_once dirname(__DIR__) . '/admin_helpers.php';
 
 $users = sql_select('`USER`', 'idUser, idGenr, nomEUser, prenomUser, emailUser, photo, age, biographie', null, null, 'idUser ASC');
+$genreLabels = admin_genre_labels(array_column($users, 'idGenr'));
 ?>
 
 <main class="container py-4">
@@ -19,7 +20,7 @@ $users = sql_select('`USER`', 'idUser, idGenr, nomEUser, prenomUser, emailUser, 
 					<td><?php echo (int) $user['idUser']; ?></td>
 					<td><?php echo admin_escape(trim($user['prenomUser'] . ' ' . $user['nomEUser'])); ?></td>
 					<td><?php echo admin_escape($user['emailUser']); ?></td>
-					<td><?php echo (int) $user['idGenr']; ?></td>
+					<td><?php echo admin_escape($genreLabels[(int) $user['idGenr']]); ?></td>
 					<td><?php echo $user['age'] === null ? '-' : (int) $user['age']; ?></td>
 					<td>
 						<a href="edit.php?idUser=<?php echo (int) $user['idUser']; ?>" class="btn btn-warning btn-sm">Modifier</a>
